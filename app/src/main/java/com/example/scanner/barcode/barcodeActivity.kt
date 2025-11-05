@@ -15,6 +15,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.barcodescanner.BarcodeScannerScreen
 import com.example.scanner.products.ProductListActivity
 import com.example.scanner.R
 import com.example.scanner.common.ApiCall
@@ -44,6 +45,7 @@ fun Barcode() {
         {
             if(reading) {
                 reading = false
+
                 val product : ApiResponse = ApiCall(it)
 
                 println((product as ApiResponse.Success).product.product_name)
