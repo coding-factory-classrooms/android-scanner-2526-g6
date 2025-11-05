@@ -4,7 +4,7 @@ enum class Category {
 }
 
 data class Product (
-    val product_name: String?
+    val product_name: String
 //    val id: Int, // noted "code" in API response
 //    val name: String,
 //    val brand: String,
@@ -15,3 +15,16 @@ data class Product (
 data class ProductResponse(
     val product: Product
 )
+
+val sampleProducts = listOf(
+    Product("lo"),
+    Product("uhihih"),
+    Product("lofsdjkfjsl"),
+    Product("lfdnsjkf"),
+    Product("aaaaaaaaaaaaaaaaaaao"),
+    Product("lo"),
+    Product("uhihih"),
+    Product("lofsdjkfjsl"),
+    Product("lfdnsjkf"),
+    Product("aaaaaaaaaaaaaaaaaaao"),
+    )

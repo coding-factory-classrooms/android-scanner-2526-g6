@@ -24,6 +24,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.example.scanner.R
 import com.example.scanner.ui.theme.ScannerTheme
 
 @Composable
@@ -36,16 +37,18 @@ fun ProductListScreen(vm: ProductViewModel = viewModel()) {
     }
 
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-      Button(onClick = { ApiCall("3017624010701") }) { Text("Button") }
-      LazyColumn( // RecyclerView
-            modifier = Modifier
-                .padding(innerPadding)
-                .fillMaxSize()
-        ) {
-            items(sampleProducts) { product ->
-                ProductCard(product)
+        Column() {
+            Button(onClick = { ApiCall("3017624010701") }) { Text("Button") }
+            LazyColumn( // RecyclerView
+                modifier = Modifier
+                    .padding(innerPadding)
+                    .fillMaxSize()
+            ) {
+                items(sampleProducts) { product ->
+                    ProductCard(product)
+                }
+
             }
-            
         }
     }
 }
@@ -55,12 +58,12 @@ fun ProductCard(product: Product) {
     Card {
         Row(Modifier.height(100.dp).fillMaxWidth()) {
             Image(
-                painterResource(product.thumbnailId),
+                painterResource(R.drawable.cristalline),
                 contentDescription = ""
             )
             Column {
-                Text(product.id.toString())
-                Text(product.name)
+//                Text(product.id.toString())
+                Text(product.product_name)
             }
             SeeMoreButton()
         }
