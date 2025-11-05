@@ -13,7 +13,7 @@ sealed class ProductListUiState {
         Error (400, 300, 500)
      */
     data object Initial : ProductListUiState() // mark as object when no attributes // LOADING state
-    data class Success(val products: List<Product>) : ProductListUiState()
+    data class Success(val products: List<ProductResponse>) : ProductListUiState()
     data class Failure(val message: String, val error: ApiError) : ProductListUiState()
 }
 
