@@ -1,5 +1,6 @@
 package com.example.scanner.products
 
+import androidx.lifecycle.ViewModel
 import com.example.scanner.common.ApiError
 import kotlinx.coroutines.flow.MutableStateFlow
 
@@ -11,11 +12,17 @@ sealed class ProductListUiState {
         Success (200)
         Error (400, 300, 500)
      */
-    data object Loading : ProductListUiState() // mark as object when no attributes
+    data object Initial : ProductListUiState() // mark as object when no attributes // LOADING state
     data class Success(val products: List<Product>) : ProductListUiState()
     data class Failure(val message: String, val error: ApiError) : ProductListUiState()
 }
 
-fun LoadProduct() {
-    val productFlow = MutableStateFlow<ProductListUiState>(ProductListUiState.Loading)
+class ProductViewModel() : ViewModel() {
+
+    val productFlow = MutableStateFlow<ProductListUiState>(ProductListUiState.Initial) // store page state -> ProductListUiState.Loading = initial state
+
+    fun LoadProduct() {
+        productFlow.value = ProductListUiState.Initial;
+    }
+
 }
