@@ -48,12 +48,12 @@ fun Barcode() {
 
                 println((product as ApiResponse.Success).product.product_name)
 
-//                val intent: Intent = Intent(context, ProductListActivity::class.java)
-//                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-//                context.startActivity(intent)
+                /*@TODO
+                * adding to database and mutableStateFlow
+                 */
+
+
                 (context as Activity?)?.finish();
-            } else {
-                println("already reading")
             }
         }
     )
