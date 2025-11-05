@@ -93,7 +93,7 @@ fun SeeMoreButton() {
 
 @Preview
 @Composable
-fun MovieListScreenPreview() {
+fun ProductListScreenPreview() {
     ScannerTheme {
         ProductListScreen()
     }
