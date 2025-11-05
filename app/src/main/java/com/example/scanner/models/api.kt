@@ -31,5 +31,7 @@ fun ApiCall(barcode: String) : Product? = runBlocking {
     val service = retrofit.create(ProductService::class.java)
     var product: Product? = fetchProduct(service, barcode)
 
+    println(product)
+
     return@runBlocking product;
 }
