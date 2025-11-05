@@ -1,5 +1,6 @@
 package com.example.scanner.products
 
+import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -22,15 +23,19 @@ import com.example.scanner.models.ApiCall
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.scanner.R
+import com.example.scanner.barcode.barcodeActivity
 import com.example.scanner.ui.theme.ScannerTheme
 
 @Composable
 fun ProductListScreen(vm: ProductViewModel = viewModel()) {
 
     val state by vm.productFlow.collectAsState();
+
+    val context = LocalContext.current
 
     LaunchedEffect(Unit) { // useEffect -> executed on load once // UNIT -> void
         vm.LoadProduct()
@@ -39,6 +44,10 @@ fun ProductListScreen(vm: ProductViewModel = viewModel()) {
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
         Column() {
             Button(onClick = { ApiCall("3017624010701") }) { Text("Button") }
+            Button(onClick = {
+                val intent: Intent = Intent(context, barcodeActivity::class.java)
+                context.startActivity(intent)
+            }){ Text("Camera")}
             LazyColumn( // RecyclerView
                 modifier = Modifier
                     .padding(innerPadding)

@@ -1,4 +1,4 @@
-package com.example.scanner.models
+package com.example.scanner.common
 
 import com.example.scanner.products.Product
 import com.example.scanner.products.ProductResponse
