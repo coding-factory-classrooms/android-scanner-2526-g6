@@ -53,6 +53,7 @@ dependencies {
 //    implementation("com.squareup.retrofit2:retrofit:3.1.0-SNAPSHOT")
     implementation ("com.squareup.retrofit2:retrofit:3.0.0")
     implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation ("io.github.pilgr:paperdb:2.7.2")
 
     implementation("com.google.mlkit:barcode-scanning:17.2.0")
     implementation("androidx.camera:camera-camera2:1.3.3")

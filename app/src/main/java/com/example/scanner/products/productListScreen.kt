@@ -19,7 +19,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.scanner.models.ApiCall
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
 import androidx.compose.material3.OutlinedButton
@@ -28,6 +27,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.scanner.R
 import com.example.scanner.barcode.barcodeActivity
+import com.example.scanner.common.ApiCall
 import com.example.scanner.ui.theme.ScannerTheme
 
 @Composable
@@ -37,12 +37,17 @@ fun ProductListScreen(vm: ProductViewModel = viewModel()) {
 
     val context = LocalContext.current
 
+    vm.createProduct(Product("bouteille"))
+    val storedProduct = vm.getProduct()
+    println( storedProduct)
+
     LaunchedEffect(Unit) { // useEffect -> executed on load once // UNIT -> void
         vm.LoadProduct()
     }
 
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
         Column() {
+            Text("${storedProduct!!.product_name}")
             Button(onClick = { ApiCall("3017624010701") }) { Text("Button") }
             Button(onClick = {
                 val intent: Intent = Intent(context, barcodeActivity::class.java)
