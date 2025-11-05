@@ -53,7 +53,7 @@ dependencies {
 //    implementation("com.squareup.retrofit2:retrofit:3.1.0-SNAPSHOT")
     implementation ("com.squareup.retrofit2:retrofit:3.0.0")
     implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
-    implementation("io.github.pilgr:paperdb:2.7.2")
+    implementation ("io.github.pilgr:paperdb:2.7.2")
 
     // NATIVES ONE
     implementation(libs.androidx.core.ktx)

@@ -1,6 +1,5 @@
 package com.example.scanner.products
 
-import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -27,12 +26,15 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.scanner.R
 import com.example.scanner.ui.theme.ScannerTheme
-import io.paperdb.Paper
 
 @Composable
 fun ProductListScreen(vm: ProductViewModel = viewModel()) {
 
     val state by vm.productFlow.collectAsState();
+
+    vm.createProduct(Product("bouteille"))
+    val storedProduct = vm.getProduct()
+    println( storedProduct)
 
     LaunchedEffect(Unit) { // useEffect -> executed on load once // UNIT -> void
         vm.LoadProduct()
@@ -40,12 +42,7 @@ fun ProductListScreen(vm: ProductViewModel = viewModel()) {
 
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
         Column() {
-
-            Paper.book().write("product", "awawawa")
-            // Retrieve data
-            val product = Paper.book().read<String>("product", "default")
-            Text("$product")
-
+            Text("${storedProduct!!.product_name}")
             Button(onClick = { ApiCall("3017624010701") }) { Text("Button") }
             LazyColumn( // RecyclerView
                 modifier = Modifier

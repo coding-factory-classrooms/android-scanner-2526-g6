@@ -2,6 +2,7 @@ package com.example.scanner.products
 
 import androidx.lifecycle.ViewModel
 import com.example.scanner.common.ApiError
+import io.paperdb.Paper
 import kotlinx.coroutines.flow.MutableStateFlow
 
 sealed class ProductListUiState {
@@ -20,6 +21,14 @@ sealed class ProductListUiState {
 class ProductViewModel() : ViewModel() {
 
     val productFlow = MutableStateFlow<ProductListUiState>(ProductListUiState.Initial) // store page state -> ProductListUiState.Loading = initial state
+
+    fun createProduct(product: Product) {
+        Paper.book().write("product", product)
+    }
+
+    fun getProduct(): Product? {
+        return Paper.book().read("product", null)
+    }
 
     fun LoadProduct() {
         productFlow.value = ProductListUiState.Initial;
