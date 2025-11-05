@@ -1,4 +1,4 @@
-package com.example.moviescompose.movies
+package com.example.scanner.products
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity

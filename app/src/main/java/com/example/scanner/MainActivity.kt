@@ -18,10 +18,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import com.example.scanner.ui.theme.ScannerTheme
 
+import android.app.Application
+import androidx.compose.ui.platform.LocalContext
+import io.paperdb.Paper
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
+        Paper.init(applicationContext)
+
         setContent {
             ScannerTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding -> // crash here :/
