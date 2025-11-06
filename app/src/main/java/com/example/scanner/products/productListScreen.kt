@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -32,6 +33,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -88,23 +91,7 @@ fun ProductListScreen(vm: ProductViewModel = viewModel()) {
     }
 
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding -> // ?
-        Column {
-            Button(onClick = {
-                val response = ApiCall("3017624010701")
-                if (response is ApiResponse.Success) {
-                    vm.createProduct(response.product)
-                    println("database ${vm.getProducts()}")
-                } else {
-                    println("failed")
-                }
-            }
-            ) { Text("Button Nutella") }
-            Button(onClick = {
-                val intent: Intent = Intent(context, barcodeActivity::class.java)
-                context.startActivity(intent)
-
-            }) { Text("Camera") }
-
+         Box(modifier = Modifier.fillMaxSize().padding(innerPadding)) { // added this to have a floating action button
             when (state) {
                 is ProductListUiState.Failure -> Text("failed")
                 ProductListUiState.Initial -> CircularProgressIndicator()
@@ -129,6 +116,51 @@ fun ProductListScreen(vm: ProductViewModel = viewModel()) {
 
                 }
             }
+
+//             Button(onClick = {
+//                 val response = ApiCall("3017624010701")
+//                 if (response is ApiResponse.Success) {
+//                     vm.createProduct(response.product)
+//                     println("database ${vm.getProducts()}")
+//                 } else {
+//                     println("failed")
+//                 }
+//             }
+//             ) { Text("Button Nutella") }  // old nutella button
+
+
+             Row(  // fit 2 overlayed floating action buttons
+                 modifier = Modifier
+                     .align(Alignment.BottomEnd)
+                     .padding(16.dp),
+                 horizontalArrangement = Arrangement.spacedBy(12.dp)
+             ) {
+                 Button( // Nutella Button uhihi
+                     onClick = {
+                         val response = ApiCall("3017624010701")
+                         if (response is ApiResponse.Success) {
+                             vm.createProduct(response.product)
+                             println("database ${vm.getProducts()}")
+                         } else {
+                             println("failed")
+                         }
+                     },
+                     modifier = Modifier
+                         .padding(16.dp),
+                     shape = RoundedCornerShape(8.dp),
+                     colors = ButtonDefaults.buttonColors(
+                         containerColor = MaterialTheme.colorScheme.primary
+                     )
+                 ) {
+                     Text("Nutella", color = MaterialTheme.colorScheme.onPrimary)
+                 }
+
+                 Button(onClick = {
+                    val intent: Intent = Intent(context, barcodeActivity::class.java)
+                    context.startActivity(intent)
+                 }) { Text("Camera") }
+             }
+
         }
     }
 }
@@ -144,7 +176,7 @@ fun ProductCard(product: Product, index: Int, onButtonClick: () -> Unit, vm: Pro
         Card(
             onClick = onButtonClick,
             modifier = Modifier.fillMaxWidth().fillMaxHeight()  ,
-            elevation = CardDefaults.cardElevation(50.dp),
+            elevation = CardDefaults.cardElevation(15.dp),
             colors = CardDefaults.cardColors(
                 containerColor = MaterialTheme.colorScheme.surface
             )) {
@@ -152,20 +184,30 @@ fun ProductCard(product: Product, index: Int, onButtonClick: () -> Unit, vm: Pro
 //                .height(100.dp)
 //                .fillMaxWidth())
 //            {
-                 AsyncImage(
-                     model = product.image_url,
-                     contentDescription = product.product_name,
-                     modifier = Modifier
-                         .fillMaxWidth()
-                         .height(200.dp)
-                 )
-                Text(product.product_name, color = MaterialTheme.colorScheme.onSurface)
-                // SeeMoreButton(onButtonClick); // replaced by the clickable card
-                Button(onClick = {
-                    vm.DeleteProduct( index, context)
-                }) {
-                    Text("delete", color = MaterialTheme.colorScheme.onSurface)
+                Box (modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Color(0xFFFFFFFF))
+                ) { // trying to have a clean white bg for imgs since they're not the standardized
+                    AsyncImage(
+                        model = product.image_url,
+                        contentDescription = product.product_name,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .fillMaxHeight(0.5f)
+                            .padding(16.dp)
+                    )
                 }
+
+                Column(modifier = Modifier.padding(24.dp)) {
+                    Text(product.product_name, color = MaterialTheme.colorScheme.onSurface)
+                    // SeeMoreButton(onButtonClick); // replaced by the clickable card
+                    Button(onClick = {
+                        vm.DeleteProduct( index, context)
+                    }) {
+                        Text("delete", color = MaterialTheme.colorScheme.onSurface)
+                    }
+                }
+
 //            }
 
         }
