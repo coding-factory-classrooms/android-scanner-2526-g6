@@ -22,15 +22,21 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.example.scanner.R
 import com.example.scanner.barcode.barcodeActivity
 import com.example.scanner.common.ApiCall
 import com.example.scanner.common.ApiResponse
 import com.example.scanner.ui.theme.ScannerTheme
+import com.google.android.material.progressindicator.CircularProgressIndicator
 
 @Composable
 fun ProductListScreen(vm: ProductViewModel = viewModel()) {
@@ -38,13 +44,28 @@ fun ProductListScreen(vm: ProductViewModel = viewModel()) {
     val state by vm.productFlow.collectAsState();
 
     val context = LocalContext.current
+    val lifecycleOwner = LocalLifecycleOwner.current
 
-    vm.createProduct(Product("bouteille"))
-    val storedProduct = vm.getProducts()
-    println( "storedproduct $storedProduct")
+//    vm.createProduct(Product("bouteille"))
+//    val storedProduct = vm.getProducts()
+//    println( "storedproduct $storedProduct")
 
     LaunchedEffect(Unit) { // useEffect -> executed on load once // UNIT -> void
         vm.LoadProduct()
+    }
+
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME) {
+                vm.LoadProduct()
+            }
+        }
+
+        lifecycleOwner.lifecycle.addObserver(observer)
+
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
+        }
     }
 
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
@@ -64,15 +85,20 @@ fun ProductListScreen(vm: ProductViewModel = viewModel()) {
                 context.startActivity(intent)
 
             }){ Text("Camera")}
-            LazyColumn( // RecyclerView
-                modifier = Modifier
-                    .padding(innerPadding)
-                    .fillMaxSize()
-            ) {
-                itemsIndexed(sampleProducts) { index, product ->
-                    ProductCard(product, index)
-                }
 
+            when(state) {
+                is ProductListUiState.Failure -> Text("failed")
+                ProductListUiState.Initial -> CircularProgressIndicator()
+                is ProductListUiState.Success -> LazyColumn( // RecyclerView
+                    modifier = Modifier
+                        .padding(innerPadding)
+                        .fillMaxSize()
+                ) {
+                    itemsIndexed((state as ProductListUiState.Success).products!!) { index, product ->
+                        ProductCard(product, index)
+                    }
+
+                }
             }
         }
     }

@@ -36,8 +36,7 @@ class barcodeActivity : ComponentActivity() {
 }
 
 @Composable
-fun Barcode() {
-    var Productvm: ProductViewModel = viewModel()
+fun Barcode(Productvm: ProductViewModel = viewModel()) {
     var reading by remember { mutableStateOf(true) }
     val context = LocalContext.current
     BarcodeScannerScreen(

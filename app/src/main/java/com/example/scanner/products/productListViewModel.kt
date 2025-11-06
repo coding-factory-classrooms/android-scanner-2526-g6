@@ -20,7 +20,7 @@ sealed class ProductListUiState {
         Error (400, 300, 500)
      */
     data object Initial : ProductListUiState() // mark as object when no attributes // LOADING state
-    data class Success(val products: List<ProductResponse>) : ProductListUiState()
+    data class Success(val products: MutableList<Product>?) : ProductListUiState()
     data class Failure(val message: String, val error: ApiError) : ProductListUiState()
 }
 
@@ -36,11 +36,19 @@ class ProductViewModel() : ViewModel() {
     }
 
     fun getProducts(): List<Product> {
-        return Paper.book().read("products", mutableListOf<Product>())!!
+        try {
+            productFlow.value = ProductListUiState.Success(Paper.book().read("products", mutableListOf<Product>()))
+            return Paper.book().read("products", mutableListOf<Product>())!!
+        } catch (e : Exception){
+            productFlow.value = ProductListUiState.Failure("Erreur", ApiError.ERROR_500)
+            println("erreur")
+            return emptyList()
+        }
     }
 
     fun LoadProduct() {
         productFlow.value = ProductListUiState.Initial;
+        getProducts()
     }
 
     fun DeleteProduct(ProductIndex: Int, context: Context ) {
