@@ -19,7 +19,7 @@ private val LightColorScheme = lightColorScheme(
     surface = LightCardBackground,
     error = ErrorRed,
 
-    onPrimary = AppBlack,
+    onPrimary = LightTextSecondary,
     onSecondary = AppBlack,
     onTertiary = AppBlack,
     onBackground = LightText,
@@ -35,8 +35,8 @@ private val DarkColorScheme = darkColorScheme(
     surface = DarkCardBackground,
     error = ErrorRed,
 
-    onPrimary = DarkText,
-    onSecondary = DarkText,
+    onPrimary = DarkTextSecondary,
+    onSecondary = DarkTextSecondary,
     onTertiary = DarkText,
     onBackground = DarkText,
     onSurface = DarkText,

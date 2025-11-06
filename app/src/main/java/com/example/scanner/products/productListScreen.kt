@@ -3,6 +3,7 @@ package com.example.scanner.products
 import com.example.scanner.ui.theme.ScannerTheme
 
 import android.content.Intent
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -36,6 +37,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -47,6 +49,7 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
@@ -54,6 +57,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -108,7 +112,7 @@ fun ProductListScreen(vm: ProductViewModel = viewModel()) {
                 ProductListUiState.Initial -> CircularProgressIndicator()
                 is ProductListUiState.Success -> {
 
-                    LazyVerticalGrid(                                                // RecyclerView
+                    LazyVerticalGrid(  // RecyclerView
                         columns = GridCells.Adaptive(minSize = 160.dp),
                         contentPadding = PaddingValues(15.dp), // sides
                         horizontalArrangement = Arrangement.spacedBy(15.dp), // between elements
@@ -134,7 +138,7 @@ fun ProductListScreen(vm: ProductViewModel = viewModel()) {
                      .padding(16.dp),
                  horizontalArrangement = Arrangement.spacedBy(12.dp)
              ) {
-                 Button( // Nutella Button uhihi
+                 Button( // Magic Button uhihi
                      onClick = {
                          val response = ApiCall("3017624010701")
                          if (response is ApiResponse.Success) {
@@ -146,10 +150,14 @@ fun ProductListScreen(vm: ProductViewModel = viewModel()) {
                      },
                      modifier = Modifier
                          .size(56.dp),
+                     elevation = ButtonDefaults.buttonElevation(15.dp),
+                     shape = RoundedCornerShape(12.dp),
+                     //shape = CircleShape,
                      contentPadding = PaddingValues(0.dp), // else wand icon ends up tiny
-                     colors = ButtonDefaults.buttonColors(
-                         containerColor = MaterialTheme.colorScheme.primary
-                     )
+                     colors = ButtonDefaults.outlinedButtonColors(
+                         containerColor = MaterialTheme.colorScheme.surface
+                     ),
+                     //border = BorderStroke(1.dp, MaterialTheme.colorScheme.onPrimary)
                  ) {
                      Icon(
                          painter = painterResource(R.drawable.wand_stars_24px),
@@ -164,16 +172,21 @@ fun ProductListScreen(vm: ProductViewModel = viewModel()) {
                  },
                      modifier = Modifier
                          .size(56.dp),
-                     contentPadding = PaddingValues(0.dp), // else wand icon ends up tiny
-                     colors = ButtonDefaults.buttonColors(
-                         containerColor = MaterialTheme.colorScheme.primary
-                     )
+                     shape = RoundedCornerShape(12.dp),
+                     //shape = CircleShape,
+                     contentPadding = PaddingValues(0.dp),
+                     elevation = ButtonDefaults.buttonElevation(15.dp),
+                     colors = ButtonDefaults.outlinedButtonColors(
+                         containerColor = MaterialTheme.colorScheme.surface
+                     ),
+                     // border = BorderStroke(1.dp, MaterialTheme.colorScheme.onPrimary) // primary?
                  )
                  {
                      Icon(
                          painter = painterResource(R.drawable.camera_24px),
                          contentDescription = "Camera",
                          modifier = Modifier.size(32.dp), // also set size here
+                         //tint = MaterialTheme.colorScheme.primary
                      )
                  }
              }
@@ -192,7 +205,7 @@ fun ProductCard(product: Product, index: Int, onButtonClick: () -> Unit, vm: Pro
     ) {
         Card(
             onClick = onButtonClick,
-            modifier = Modifier.fillMaxWidth().fillMaxHeight()  ,
+            modifier = Modifier.fillMaxWidth().fillMaxHeight(),
             elevation = CardDefaults.cardElevation(15.dp),
             colors = CardDefaults.cardColors(
                 containerColor = MaterialTheme.colorScheme.surface
@@ -211,32 +224,63 @@ fun ProductCard(product: Product, index: Int, onButtonClick: () -> Unit, vm: Pro
                         modifier = Modifier
                             .fillMaxWidth()
                             .fillMaxHeight(0.5f)
-                            .padding(16.dp)
+                            .padding(20.dp)
+//                            .clip(
+//                                RoundedCornerShape(
+//                                    topStart = 0.dp,
+//                                    topEnd = 0.dp,
+//                                    bottomStart = 40.dp,// only round the bottom
+//                                    bottomEnd = 40.dp
+//                                )
+//                            ),
                     )
+                    Button(
+                        onClick = { vm.DeleteProduct(index, context) },
+                        modifier = Modifier
+                            .size(40.dp)
+                            .align(Alignment.TopEnd) // top left alignment for space efficient cards
+                            .padding(2.dp),
+                        //shape = CircleShape,
+                        contentPadding = PaddingValues(0.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Color.Transparent
+                        ),
+                    ) {
+                        Icon(
+                            painter = painterResource(R.drawable.delete_24px),
+                            contentDescription = "Trashbin",
+                            modifier = Modifier.size(32.dp),
+                            tint = MaterialTheme.colorScheme.error
+                        )
+                    }
                 }
 
-                Column(modifier = Modifier.padding(24.dp)) {
+                Column(modifier = Modifier.padding(18.dp)) {
                     Text(
                         text =product.product_name,
                         color = MaterialTheme.colorScheme.onSurface,
                         fontWeight = FontWeight.Black,
                         fontSize = 20.sp,
+                        maxLines = 1, // else cards grid imbalance
+                        overflow = TextOverflow.Ellipsis
                     )
                     Spacer(
                         modifier = Modifier.padding(2.dp)
                     )
                     Text(
                         text = "Lorem ipsum dolo c’est trop bon en plus faut rester hydraté",
-                        color = MaterialTheme.colorScheme.onBackground,
+                        color = MaterialTheme.colorScheme.onPrimary,
                         fontSize = 12.sp,
-                        lineHeight = 14.sp
+                        lineHeight = 14.sp,
+                        maxLines = 3, // else cards grid imbalance
+                        overflow = TextOverflow.Ellipsis
                         )
-                    // SeeMoreButton(onButtonClick); // replaced by the clickable card
-                    Button(onClick = {
-                        vm.DeleteProduct( index, context)
-                    }) {
-                        Text("delete", color = MaterialTheme.colorScheme.onSurface)
-                    }
+                    Text(
+                        text = "See more",
+                        color = MaterialTheme.colorScheme.secondary,
+                        fontSize = 12.sp,
+                    )
+
                 }
 
 //            }
