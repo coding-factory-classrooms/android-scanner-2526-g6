@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -49,8 +50,10 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
@@ -104,7 +107,7 @@ fun ProductListScreen(vm: ProductViewModel = viewModel()) {
 
                     LazyVerticalGrid( // RecyclerView
                         columns = GridCells.Adaptive(minSize = 180.dp),
-                        contentPadding = PaddingValues(16.dp),
+                        contentPadding = PaddingValues(17.dp),
                         horizontalArrangement = Arrangement.spacedBy(12.dp),
                         verticalArrangement = Arrangement.spacedBy(12.dp),
                         modifier = Modifier.heightIn(min = screenHeight) // grid should always be screen height
@@ -192,7 +195,21 @@ fun ProductCard(product: Product, index: Int, onButtonClick: () -> Unit, vm: Pro
                 }
 
                 Column(modifier = Modifier.padding(24.dp)) {
-                    Text(product.product_name, color = MaterialTheme.colorScheme.onSurface)
+                    Text(
+                        text =product.product_name,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        fontWeight = FontWeight.ExtraBold,
+                        fontSize = 20.sp,
+                    )
+                    Spacer(
+                        modifier = Modifier.padding(2.dp)
+                    )
+                    Text(
+                        text = "Lorem ipsum dolo c’est trop bon en plus faut rester hydraté",
+                        color = MaterialTheme.colorScheme.onBackground,
+                        fontSize = 12.sp,
+                        lineHeight = 14.sp
+                        )
                     // SeeMoreButton(onButtonClick); // replaced by the clickable card
                     Button(onClick = {
                         vm.DeleteProduct( index, context)
