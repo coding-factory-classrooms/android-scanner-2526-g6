@@ -14,7 +14,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.barcodescanner.BarcodeScannerScreen
-import com.example.scanner.products.ProductListActivity
 import com.example.scanner.R
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.scanner.common.ApiCall

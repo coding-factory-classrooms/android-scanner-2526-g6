@@ -26,6 +26,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
@@ -35,6 +36,7 @@ import com.example.scanner.R
 import com.example.scanner.barcode.barcodeActivity
 import com.example.scanner.common.ApiCall
 import com.example.scanner.common.ApiResponse
+import com.example.scanner.productDetail.ProductDetailActivity
 import com.example.scanner.ui.theme.ScannerTheme
 import com.google.android.material.progressindicator.CircularProgressIndicator
 
@@ -72,7 +74,7 @@ fun ProductListScreen(vm: ProductViewModel = viewModel()) {
         Column {
             Button(onClick = {
                 val response = ApiCall("3274080005003")
-                if(response is ApiResponse.Success) {
+                if (response is ApiResponse.Success) {
                     vm.createProduct(response.product)
                     println("database ${vm.getProducts()}")
                 } else {
@@ -84,9 +86,9 @@ fun ProductListScreen(vm: ProductViewModel = viewModel()) {
                 val intent: Intent = Intent(context, barcodeActivity::class.java)
                 context.startActivity(intent)
 
-            }){ Text("Camera")}
+            }) { Text("Camera") }
 
-            when(state) {
+            when (state) {
                 is ProductListUiState.Failure -> Text("failed")
                 ProductListUiState.Initial -> CircularProgressIndicator()
                 is ProductListUiState.Success -> LazyColumn( // RecyclerView
@@ -95,7 +97,12 @@ fun ProductListScreen(vm: ProductViewModel = viewModel()) {
                         .fillMaxSize()
                 ) {
                     itemsIndexed((state as ProductListUiState.Success).products!!) { index, product ->
-                        ProductCard(product, index)
+                        ProductCard(product, index, onButtonClick = {
+                            val intent = Intent(context, ProductDetailActivity::class.java);
+                            intent.putExtra("id", product._id.toString())
+                            context.startActivity(intent)
+
+                        })
                     }
 
                 }
@@ -105,8 +112,8 @@ fun ProductListScreen(vm: ProductViewModel = viewModel()) {
 }
 
 @Composable
-fun ProductCard(product: Product, index: Int, vm: ProductViewModel = viewModel()) {
-    var context = LocalContext.current
+fun ProductCard(product: Product, index: Int, onButtonClick: () -> Unit, vm: ProductViewModel = viewModel(),) {
+    val context = LocalContext.current
     Card {
         Row(Modifier
             .height(100.dp)
@@ -119,7 +126,7 @@ fun ProductCard(product: Product, index: Int, vm: ProductViewModel = viewModel()
 //                Text(product.id.toString())
                 Text(product.product_name)
             }
-            SeeMoreButton()
+            SeeMoreButton(onButtonClick);
             Button(onClick = {
                 vm.DeleteProduct( index, context)
             })
@@ -131,8 +138,8 @@ fun ProductCard(product: Product, index: Int, vm: ProductViewModel = viewModel()
 }
 
 @Composable
-fun SeeMoreButton() {
-    OutlinedButton(onClick = {TODO()}) {
+fun SeeMoreButton(onButtonClick: () -> Unit) {
+    OutlinedButton(onClick = onButtonClick) {
         Text(text="See more")
     }
 }
