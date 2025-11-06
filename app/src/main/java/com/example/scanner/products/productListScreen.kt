@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
@@ -32,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import coil.compose.AsyncImage
 import com.example.scanner.R
 import com.example.scanner.barcode.barcodeActivity
 import com.example.scanner.common.ApiCall
@@ -73,7 +75,7 @@ fun ProductListScreen(vm: ProductViewModel = viewModel()) {
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
         Column {
             Button(onClick = {
-                val response = ApiCall("3274080005003")
+                val response = ApiCall("3017624010701")
                 if (response is ApiResponse.Success) {
                     vm.createProduct(response.product)
                     println("database ${vm.getProducts()}")
@@ -118,9 +120,12 @@ fun ProductCard(product: Product, index: Int, onButtonClick: () -> Unit, vm: Pro
         Row(Modifier
             .height(100.dp)
             .fillMaxWidth()) {
-            Image(
-                painterResource(R.drawable.cristalline),
-                contentDescription = ""
+            AsyncImage(
+                model = product.image_url,
+                contentDescription = product.product_name,
+                modifier = Modifier
+                    .width(150.dp)
+                    .height(150.dp)
             )
             Column {
 //                Text(product.id.toString())

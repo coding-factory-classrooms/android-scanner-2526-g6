@@ -6,8 +6,8 @@ enum class Category {
 data class Product (
     val _id: String, // noted "code" in API response
     val product_name: String,
-//    val name: String,
-//    val brand: String,
+    val image_url: String,
+    val brands: String
 //    val ingredients: String,
 //    val category: String,
 //    val nutritionGrade: String, // nutriscore, can be null?
@@ -16,6 +16,7 @@ data class ProductResponse(
     val product: Product
 )
 
+/*
 val sampleProducts = listOf(
     Product("lo","0"),
     Product("uhihih","1"),
@@ -28,5 +29,6 @@ val sampleProducts = listOf(
     Product("lfdnsjkf","8"),
     Product("aaaaaaaaaaaaaaaaaaao","9"),
     )
+*/
 
-val fakeProduct = Product("Faux Produit tres bon", "123")
+val fakeProduct = Product("Faux Produit tres bon", "123", "https://images.openfoodfacts.net/images/products/405/648/964/1018/front_fr.3.400.jpg", "Test")

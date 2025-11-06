@@ -7,8 +7,10 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -23,7 +25,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.compose.AsyncImage
 import com.example.scanner.R
 import com.example.scanner.products.Product
 import com.example.scanner.products.ProductViewModel
@@ -64,14 +68,21 @@ private fun productDetailSuccessBody(product: Product) {
                 .padding(innerPadding),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Text(product.product_name)
-            Image(
-                painter = painterResource(R.drawable.ic_launcher_background),
-                contentDescription = "",
+            AsyncImage(
+                model = product.image_url,
+                contentDescription = product.product_name,
                 modifier = Modifier
                     .clip(CircleShape)
                     .size(180.dp)
             )
+            Text(product.product_name, fontSize = 32.sp)
+            Text(product.brands)
+        }
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+        )
+        {
         }
     }
 }

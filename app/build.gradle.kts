@@ -54,7 +54,9 @@ dependencies {
     implementation ("com.squareup.retrofit2:retrofit:3.0.0")
     implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation ("io.github.pilgr:paperdb:2.7.2")
+    implementation("io.coil-kt:coil-compose:2.6.0")
 
+    //For barrecode
     implementation("com.google.mlkit:barcode-scanning:17.2.0")
     implementation("androidx.camera:camera-camera2:1.3.3")
     implementation("androidx.camera:camera-lifecycle:1.3.3")
