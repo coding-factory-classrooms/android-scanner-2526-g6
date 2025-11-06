@@ -4,8 +4,8 @@ enum class Category {
 }
 
 data class Product (
-    val product_name: String
-//    val id: Int, // noted "code" in API response
+    val product_name: String,
+    val id: Int, // noted "code" in API response
 //    val name: String,
 //    val brand: String,
 //    val ingredients: String,
@@ -17,14 +17,16 @@ data class ProductResponse(
 )
 
 val sampleProducts = listOf(
-    Product("lo"),
-    Product("uhihih"),
-    Product("lofsdjkfjsl"),
-    Product("lfdnsjkf"),
-    Product("aaaaaaaaaaaaaaaaaaao"),
-    Product("lo"),
-    Product("uhihih"),
-    Product("lofsdjkfjsl"),
-    Product("lfdnsjkf"),
-    Product("aaaaaaaaaaaaaaaaaaao"),
+    Product("lo",0),
+    Product("uhihih",1),
+    Product("lofsdjkfjsl",2),
+    Product("lfdnsjkf",3),
+    Product("aaaaaaaaaaaaaaaaaaao",4),
+    Product("lo",5),
+    Product("uhihih",6),
+    Product("lofsdjkfjsl",7),
+    Product("lfdnsjkf",8),
+    Product("aaaaaaaaaaaaaaaaaaao",9),
     )
+
+val fakeProduct = Product("Faux Produit tres bon", 123)

@@ -72,7 +72,7 @@ fun ProductCard(product: Product) {
 
 @Composable
 fun SeeMoreButton() {
-    OutlinedButton(onClick = {TODO()}) {
+    OutlinedButton(onClick = {}) {
         Text(text="See more")
     }
 }
