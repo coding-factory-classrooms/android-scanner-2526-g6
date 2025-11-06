@@ -118,16 +118,30 @@ fun ProductListScreen(vm: ProductViewModel = viewModel()) {
 }
 
 @Composable
-fun ProductCard(product: Product) {
-    Row(Modifier.height(100.dp).fillMaxWidth()) {
-        Image(
-            painterResource(R.drawable.cristalline),
-            contentDescription = ""
-        )
-        Column {
+fun ProductCard(product: Product, index: Int, onButtonClick: () -> Unit, vm: ProductViewModel = viewModel(),) {
+    val context = LocalContext.current
+    Card {
+        Row(Modifier
+            .height(100.dp)
+            .fillMaxWidth()) {
+            AsyncImage(
+                model = product.image_url,
+                contentDescription = product.product_name,
+                modifier = Modifier
+                    .width(150.dp)
+                    .height(150.dp)
+            )
+            Column {
 //                Text(product.id.toString())
-            Text(product.product_name)
-            SeeMoreButton()
+                Text(product.product_name)
+            }
+            SeeMoreButton(onButtonClick);
+            Button(onClick = {
+                vm.DeleteProduct( index, context)
+            })
+            {
+                Text("delete button")
+            }
         }
     }
 }
