@@ -29,7 +29,6 @@ class ProductViewModel() : ViewModel() {
     val productFlow = MutableStateFlow<ProductListUiState>(ProductListUiState.Initial) // store page state -> ProductListUiState.Loading = initial state
 
     fun createProduct(product: Product) {
-
         var ProductList = Paper.book().read("products", mutableListOf<Product>())
         ProductList!!.add(product)
         Paper.book().write("products", ProductList)

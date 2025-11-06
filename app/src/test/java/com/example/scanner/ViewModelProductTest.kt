@@ -1,26 +1,14 @@
-package com.example.scanner
+package com.example.scanner.products
 
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider
-import androidx.test.platform.app.InstrumentationRegistry
-import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.example.scanner.products.Product
-import com.example.scanner.products.ProductViewModel
 import io.paperdb.Paper
-
-import org.junit.Test
-import org.junit.runner.RunWith
-
 import org.junit.Assert.*
 import org.junit.Before
+import org.junit.Test
 
-/**
- * Instrumented test, which will execute on an Android device.
- *
- * See [testing documentation](http://d.android.com/tools/testing).
- */
-@RunWith(AndroidJUnit4::class)
-class ExampleInstrumentedTest {
+class ProductViewModelTest {
+
     private lateinit var viewModel: ProductViewModel
     private lateinit var context: Context
 
@@ -64,6 +52,7 @@ class ExampleInstrumentedTest {
     fun testDeleteProduct() {
         println("=== testDeleteProduct ===")
 
+        val context = null // not used in test
         viewModel.createProduct(Product("1", "Cristalline","", ""))
         viewModel.createProduct(Product("2", "Coca-Cola","", ""))
 
