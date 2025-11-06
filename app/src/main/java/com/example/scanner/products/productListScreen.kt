@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.OutlinedButton
@@ -82,7 +83,9 @@ fun ProductListScreen(vm: ProductViewModel = viewModel()) {
             Button(onClick = {
                 val intent: Intent = Intent(context, barcodeActivity::class.java)
                 context.startActivity(intent)
+
             }){ Text("Camera")}
+
             when(state) {
                 is ProductListUiState.Failure -> Text("failed")
                 ProductListUiState.Initial -> CircularProgressIndicator()
@@ -91,8 +94,8 @@ fun ProductListScreen(vm: ProductViewModel = viewModel()) {
                         .padding(innerPadding)
                         .fillMaxSize()
                 ) {
-                    items((state as ProductListUiState.Success).products!!) { product ->
-                        ProductCard(product)
+                    itemsIndexed((state as ProductListUiState.Success).products!!) { index, product ->
+                        ProductCard(product, index)
                     }
 
                 }
@@ -102,9 +105,12 @@ fun ProductListScreen(vm: ProductViewModel = viewModel()) {
 }
 
 @Composable
-fun ProductCard(product: Product) {
+fun ProductCard(product: Product, index: Int, vm: ProductViewModel = viewModel()) {
+    var context = LocalContext.current
     Card {
-        Row(Modifier.height(100.dp).fillMaxWidth()) {
+        Row(Modifier
+            .height(100.dp)
+            .fillMaxWidth()) {
             Image(
                 painterResource(R.drawable.cristalline),
                 contentDescription = ""
@@ -114,6 +120,12 @@ fun ProductCard(product: Product) {
                 Text(product.product_name)
             }
             SeeMoreButton()
+            Button(onClick = {
+                vm.DeleteProduct( index, context)
+            })
+            {
+                Text("delete button")
+            }
         }
     }
 }

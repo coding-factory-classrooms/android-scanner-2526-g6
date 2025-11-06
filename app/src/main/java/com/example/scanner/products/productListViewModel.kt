@@ -1,5 +1,9 @@
 package com.example.scanner.products
 
+import android.content.Context
+import android.widget.Toast
+import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import com.example.scanner.common.ApiError
 import com.example.scanner.common.ApiResponse
@@ -45,6 +49,15 @@ class ProductViewModel() : ViewModel() {
     fun LoadProduct() {
         productFlow.value = ProductListUiState.Initial;
         getProducts()
+    }
+
+    fun DeleteProduct(ProductIndex: Int, context: Context ) {
+        var ProductList = Paper.book().read("products", mutableListOf<Product>())!!
+        if (ProductList.size > ProductIndex){
+            Toast.makeText(context, "impossible", Toast.LENGTH_SHORT).show()
+        }
+        ProductList.removeAt(ProductIndex)
+        Paper.book().write("products", ProductList)
     }
 
 }
