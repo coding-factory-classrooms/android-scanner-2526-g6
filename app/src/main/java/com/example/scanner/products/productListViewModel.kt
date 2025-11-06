@@ -53,11 +53,12 @@ class ProductViewModel() : ViewModel() {
 
     fun DeleteProduct(ProductIndex: Int, context: Context ) {
         var ProductList = Paper.book().read("products", mutableListOf<Product>())!!
-        if (ProductList.size > ProductIndex){
-            Toast.makeText(context, "impossible", Toast.LENGTH_SHORT).show()
+        if (ProductList.size == 0){
+            return Toast.makeText(context, "impossible", Toast.LENGTH_SHORT).show()
         }
         ProductList.removeAt(ProductIndex)
         Paper.book().write("products", ProductList)
+        LoadProduct()
     }
 
 }
