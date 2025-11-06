@@ -1,12 +1,10 @@
 package com.example.scanner.barcode
 
 import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -18,11 +16,11 @@ import androidx.core.view.WindowInsetsCompat
 import com.example.barcodescanner.BarcodeScannerScreen
 import com.example.scanner.products.ProductListActivity
 import com.example.scanner.R
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.scanner.common.ApiCall
 import com.example.scanner.common.ApiResponse
-import com.example.scanner.products.ProductListScreen
+import com.example.scanner.products.ProductViewModel
 import com.example.scanner.ui.theme.ScannerTheme
-import com.google.android.datatransport.runtime.dagger.Component
 
 class barcodeActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,21 +37,19 @@ class barcodeActivity : ComponentActivity() {
 
 @Composable
 fun Barcode() {
+    var Productvm: ProductViewModel = viewModel()
     var reading by remember { mutableStateOf(true) }
     val context = LocalContext.current
     BarcodeScannerScreen(
         {
             if(reading) {
                 reading = false
-
                 val product : ApiResponse = ApiCall(it)
 
                 println((product as ApiResponse.Success).product.product_name)
 
-                /*@TODO
-                * adding to database and mutableStateFlow
-                 */
-
+                Productvm.createProduct(product.product)
+                println(Productvm.getProducts())
 
                 (context as Activity?)?.finish();
             }

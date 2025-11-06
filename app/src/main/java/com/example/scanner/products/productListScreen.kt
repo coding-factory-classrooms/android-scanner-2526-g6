@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import com.example.scanner.R
 import com.example.scanner.barcode.barcodeActivity
 import com.example.scanner.common.ApiCall
+import com.example.scanner.common.ApiResponse
 import com.example.scanner.ui.theme.ScannerTheme
 
 @Composable
@@ -38,17 +39,25 @@ fun ProductListScreen(vm: ProductViewModel = viewModel()) {
     val context = LocalContext.current
 
     vm.createProduct(Product("bouteille"))
-    val storedProduct = vm.getProduct()
-    println( storedProduct)
+    val storedProduct = vm.getProducts()
+    println( "storedproduct $storedProduct")
 
     LaunchedEffect(Unit) { // useEffect -> executed on load once // UNIT -> void
         vm.LoadProduct()
     }
 
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-        Column() {
-            Text("${storedProduct!!.product_name}")
-            Button(onClick = { ApiCall("3017624010701") }) { Text("Button") }
+        Column {
+            Button(onClick = {
+                val response = ApiCall("3274080005003")
+                if(response is ApiResponse.Success) {
+                    vm.createProduct(response.product)
+                    println("database ${vm.getProducts()}")
+                } else {
+                    println("failed")
+                }
+            }
+            ) { Text("Button Nutella") }
             Button(onClick = {
                 val intent: Intent = Intent(context, barcodeActivity::class.java)
                 context.startActivity(intent)

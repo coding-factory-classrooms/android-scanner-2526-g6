@@ -2,8 +2,10 @@ package com.example.scanner.products
 
 import androidx.lifecycle.ViewModel
 import com.example.scanner.common.ApiError
+import com.example.scanner.common.ApiResponse
 import io.paperdb.Paper
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlin.random.Random
 
 sealed class ProductListUiState {
     /* children classes are all possible states depending on :
@@ -23,11 +25,14 @@ class ProductViewModel() : ViewModel() {
     val productFlow = MutableStateFlow<ProductListUiState>(ProductListUiState.Initial) // store page state -> ProductListUiState.Loading = initial state
 
     fun createProduct(product: Product) {
-        Paper.book().write("product", product)
+
+        var ProductList = Paper.book().read("products", mutableListOf<Product>())
+        ProductList!!.add(product)
+        Paper.book().write("products", ProductList)
     }
 
-    fun getProduct(): Product? {
-        return Paper.book().read("product", null)
+    fun getProducts(): List<Product> {
+        return Paper.book().read("products", mutableListOf<Product>())!!
     }
 
     fun LoadProduct() {
