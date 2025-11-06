@@ -43,9 +43,12 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Alignment
@@ -73,6 +76,7 @@ import com.example.scanner.productDetail.ProductDetailActivity
 import com.example.scanner.ui.theme.ScannerTheme
 import com.google.android.material.progressindicator.CircularProgressIndicator
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProductListScreen(vm: ProductViewModel = viewModel()) {
     val state by vm.productFlow.collectAsState();
@@ -103,15 +107,20 @@ fun ProductListScreen(vm: ProductViewModel = viewModel()) {
     val screenHeight = configuration.screenHeightDp.dp // get screen height for Min Box Size
 
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding -> // ?
+
          Box(modifier = Modifier
              .fillMaxWidth()
              .padding(innerPadding)
          ) { // box will help contain floating action button
+
+             Row(modifier = Modifier.padding(24.dp)) {
+                 Text("No scanned products yet.")
+             }
+
             when (state) {
                 is ProductListUiState.Failure -> Text("failed")
                 ProductListUiState.Initial -> CircularProgressIndicator()
                 is ProductListUiState.Success -> {
-
                     LazyVerticalGrid(  // RecyclerView
                         columns = GridCells.Adaptive(minSize = 160.dp),
                         contentPadding = PaddingValues(15.dp), // sides
@@ -234,6 +243,25 @@ fun ProductCard(product: Product, index: Int, onButtonClick: () -> Unit, vm: Pro
 //                                )
 //                            ),
                     )
+                    Button(
+                        onClick = { TODO() }, // vm.Favorite(index, context)
+                        modifier = Modifier
+                            .size(40.dp)
+                            .align(Alignment.TopStart) // top left alignment for space efficient cards
+                            .padding(2.dp),
+                        //shape = CircleShape,
+                        contentPadding = PaddingValues(0.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Color.Transparent
+                        ),
+                    ) {
+                        Icon(
+                            painter = painterResource(R.drawable.star_24px),
+                            contentDescription = "Favorite",
+                            modifier = Modifier.size(32.dp),
+                            tint = MaterialTheme.colorScheme.tertiary
+                        )
+                    }
                     Button(
                         onClick = { vm.DeleteProduct(index, context) },
                         modifier = Modifier

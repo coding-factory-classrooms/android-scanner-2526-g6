@@ -14,7 +14,7 @@ import androidx.compose.ui.platform.LocalContext
 private val LightColorScheme = lightColorScheme(
     primary = LogoGreen,
     secondary = LinkBlue,
-    tertiary = LogoGreen, // optional accent
+    tertiary = Yellow, // optional accent
     background = LightBackground,
     surface = LightCardBackground,
     error = ErrorRed,

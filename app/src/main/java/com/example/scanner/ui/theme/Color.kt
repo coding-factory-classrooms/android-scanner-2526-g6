@@ -8,6 +8,8 @@ val AppBlack = Color(0xFF000000)
 val LinkBlue = Color(0xFF3B82F6)
 val ErrorRed = Color(0xFFDC2626)
 
+val Yellow = Color(0xFFFACC15)
+
 // Light theme colors
 val LightBackground = Color(0xFFF5F5F5)
 val LightCardBackground = Color(0xFFF3F3F3)
