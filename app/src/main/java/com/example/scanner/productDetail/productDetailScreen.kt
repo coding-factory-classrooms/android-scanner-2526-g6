@@ -26,19 +26,20 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.scanner.R
 import com.example.scanner.products.Product
+import com.example.scanner.products.ProductViewModel
 import com.example.scanner.products.fakeProduct
 import com.example.scanner.ui.theme.ScannerTheme
 
 
 @Composable
-fun ProductDetailScreen(productId: String, vm: ProductDetailViewModel = viewModel()) {
+fun ProductDetailScreen(productId: Int, vm: ProductDetailViewModel = viewModel(), Pvm: ProductViewModel = viewModel()) {
 
     val context = LocalContext.current
 
     val State by vm.uiStateFlow.collectAsState()
 
     LaunchedEffect(Unit) {
-        vm.loadProductDetail(productId)
+        vm.loadProductDetail(productId, Pvm)
     }
         when(val s = State){
             is ProductDetailUiState.Initial -> {}

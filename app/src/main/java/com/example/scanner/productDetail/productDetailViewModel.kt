@@ -1,7 +1,9 @@
 package com.example.scanner.productDetail
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.scanner.products.Product
+import com.example.scanner.products.ProductViewModel
 import com.example.scanner.products.fakeProduct
 import kotlinx.coroutines.flow.MutableStateFlow
 
@@ -16,11 +18,11 @@ class ProductDetailViewModel : ViewModel() {
 
     val uiStateFlow = MutableStateFlow<ProductDetailUiState>(ProductDetailUiState.Initial)
 
-    fun loadProductDetail(productId: String) {
+    fun loadProductDetail(productId: Int, vm: ProductViewModel) {
         uiStateFlow.value = ProductDetailUiState.Initial
 
+        val product = vm.getProductById(productId)
 
-        uiStateFlow.value = ProductDetailUiState.Success(fakeProduct)
-
+        uiStateFlow.value = ProductDetailUiState.Success(product!!);
     }
 }

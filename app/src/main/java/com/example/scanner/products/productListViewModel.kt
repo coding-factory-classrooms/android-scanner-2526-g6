@@ -46,6 +46,18 @@ class ProductViewModel() : ViewModel() {
         }
     }
 
+    fun getProductById(id : Int): Product? {
+        try {
+            productFlow.value = ProductListUiState.Success(Paper.book().read("products", mutableListOf<Product>()))
+            val t = Paper.book().read("products", mutableListOf<Product>())!!
+            return t.get(id)
+        } catch (e : Exception){
+            productFlow.value = ProductListUiState.Failure("Erreur", ApiError.ERROR_500)
+            println("erreur")
+            return null
+        }
+    }
+
     fun LoadProduct() {
         productFlow.value = ProductListUiState.Initial;
         getProducts()

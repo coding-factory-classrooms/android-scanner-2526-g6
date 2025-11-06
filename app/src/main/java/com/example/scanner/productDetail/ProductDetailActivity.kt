@@ -1,6 +1,7 @@
 package com.example.scanner.productDetail
 
 import android.os.Bundle
+import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -12,11 +13,11 @@ import com.example.scanner.R
 import com.example.scanner.products.ProductListScreen
 import com.example.scanner.ui.theme.ScannerTheme
 
-class ProductDetailActivity : AppCompatActivity() {
+class ProductDetailActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val productId = intent.getStringExtra("id")!!
+        val productId = intent.getIntExtra("id", 0)!!
 
         setContent {
             ProductDetailScreen(productId)
@@ -28,6 +29,6 @@ class ProductDetailActivity : AppCompatActivity() {
 @Composable
 fun GreetingPreview() {
     ScannerTheme {
-        ProductDetailScreen("123")
+        ProductDetailScreen(0)
     }
 }

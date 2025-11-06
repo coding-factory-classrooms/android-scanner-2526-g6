@@ -1,4 +1,4 @@
-package com.example.moviescompose.movies
+package com.example.products
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity

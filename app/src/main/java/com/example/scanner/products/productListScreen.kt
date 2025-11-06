@@ -99,7 +99,7 @@ fun ProductListScreen(vm: ProductViewModel = viewModel()) {
                     itemsIndexed((state as ProductListUiState.Success).products!!) { index, product ->
                         ProductCard(product, index, onButtonClick = {
                             val intent = Intent(context, ProductDetailActivity::class.java);
-                            intent.putExtra("id", product._id.toString())
+                            intent.putExtra("id", index)
                             context.startActivity(intent)
 
                         })
