@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
@@ -23,21 +24,25 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import coil.compose.AsyncImage
 import com.example.scanner.R
 import com.example.scanner.barcode.barcodeActivity
 import com.example.scanner.common.ApiCall
 import com.example.scanner.common.ApiResponse
+import com.example.scanner.productDetail.ProductDetailActivity
 import com.example.scanner.ui.theme.ScannerTheme
 import com.google.android.material.progressindicator.CircularProgressIndicator
 
@@ -74,8 +79,8 @@ fun ProductListScreen(vm: ProductViewModel = viewModel()) {
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
         Column {
             Button(onClick = {
-                val response = ApiCall("3274080005003")
-                if(response is ApiResponse.Success) {
+                val response = ApiCall("3017624010701")
+                if (response is ApiResponse.Success) {
                     vm.createProduct(response.product)
                     println("database ${vm.getProducts()}")
                 } else {
@@ -86,8 +91,10 @@ fun ProductListScreen(vm: ProductViewModel = viewModel()) {
             Button(onClick = {
                 val intent: Intent = Intent(context, barcodeActivity::class.java)
                 context.startActivity(intent)
-            }){ Text("Camera")}
-            when(state) {
+
+            }) { Text("Camera") }
+
+            when (state) {
                 is ProductListUiState.Failure -> Text("failed")
                 ProductListUiState.Initial -> CircularProgressIndicator()
                 is ProductListUiState.Success -> LazyColumn( // RecyclerView
@@ -95,8 +102,13 @@ fun ProductListScreen(vm: ProductViewModel = viewModel()) {
                         .padding(innerPadding)
                         .fillMaxSize()
                 ) {
-                    items((state as ProductListUiState.Success).products!!) { product ->
-                        ProductCard(product)
+                    itemsIndexed((state as ProductListUiState.Success).products!!) { index, product ->
+                        ProductCard(product, index, onButtonClick = {
+                            val intent = Intent(context, ProductDetailActivity::class.java);
+                            intent.putExtra("id", index)
+                            context.startActivity(intent)
+
+                        })
                     }
 
                 }
@@ -121,8 +133,8 @@ fun ProductCard(product: Product) {
 }
 
 @Composable
-fun SeeMoreButton() {
-    OutlinedButton(onClick = {TODO()}) {
+fun SeeMoreButton(onButtonClick: () -> Unit) {
+    OutlinedButton(onClick = onButtonClick) {
         Text(text="See more")
     }
 }

@@ -27,6 +27,7 @@ suspend fun fetchProduct(service: ProductService, barcode: String) : ApiResponse
     return try {
         ApiResponse.Success(service.getProduct(barcode).product)
     } catch (e: Exception){
+        println(e)
         ApiResponse.Failed("Problème avec l'API")
     }
 }

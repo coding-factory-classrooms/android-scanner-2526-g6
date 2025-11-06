@@ -16,7 +16,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Scanner">
         <activity
-            android:name="com.example.scanner.products.ProductListActivity"
+            android:name="com.example.scanner.productDetail.ProductDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.example.products.ProductListActivity"
             android:exported="false" />
         <activity
             android:name="com.example.scanner.barcode.barcodeActivity"

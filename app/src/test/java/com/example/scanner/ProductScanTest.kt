@@ -1,7 +1,7 @@
 package com.example.scanner
 
-import com.example.scanner.models.ApiCall
-import com.example.scanner.models.ApiResponse
+import com.example.scanner.common.ApiCall
+import com.example.scanner.common.ApiResponse
 import junit.framework.TestCase.assertEquals
 import org.junit.Test
 
@@ -18,7 +18,7 @@ class ProductScanTest {
     fun ProductApiCallJus() {
         val call = ApiCall("4056489641018") // jus d'orange awaited
 
-        if(call is ApiResponse.Success) assertEquals("Pur jus d'orange sans pulpe", call.product.product_name);
+        assertEquals("Pur jus d'orange sans pulpe", (call as ApiResponse.Success).product.product_name);
     }
 
     @Test
