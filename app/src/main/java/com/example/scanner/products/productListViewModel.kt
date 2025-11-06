@@ -73,4 +73,18 @@ class ProductViewModel() : ViewModel() {
         LoadProduct()
     }
 
+    fun searchProducts(query: String) {
+        try {
+            val allProduct = Paper.book().read("products", mutableListOf<Product>())!!
+            val filteredList = allProduct.filter { product ->
+                product.product_name.contains(query, ignoreCase = true)
+            }
+            productFlow.value = ProductListUiState.Success(filteredList.toMutableList())
+        }catch (e: Exception){
+            val message = "erreur recherche"
+            productFlow.value = ProductListUiState.Failure(message, ApiError.ERROR_500)
+        }
+
+    }
+
 }
