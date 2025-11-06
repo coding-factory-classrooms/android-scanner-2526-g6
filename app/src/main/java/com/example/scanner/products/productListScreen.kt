@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
@@ -40,6 +41,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.minimumInteractiveComponentSize
@@ -50,6 +52,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -105,11 +108,11 @@ fun ProductListScreen(vm: ProductViewModel = viewModel()) {
                 ProductListUiState.Initial -> CircularProgressIndicator()
                 is ProductListUiState.Success -> {
 
-                    LazyVerticalGrid( // RecyclerView
-                        columns = GridCells.Adaptive(minSize = 180.dp),
-                        contentPadding = PaddingValues(17.dp),
-                        horizontalArrangement = Arrangement.spacedBy(12.dp),
-                        verticalArrangement = Arrangement.spacedBy(12.dp),
+                    LazyVerticalGrid(                                                // RecyclerView
+                        columns = GridCells.Adaptive(minSize = 160.dp),
+                        contentPadding = PaddingValues(15.dp), // sides
+                        horizontalArrangement = Arrangement.spacedBy(15.dp), // between elements
+                        verticalArrangement = Arrangement.spacedBy(15.dp),
                         modifier = Modifier.heightIn(min = screenHeight) // grid should always be screen height
                                                                          // else card elevation looks cut off
                     ) {
@@ -142,19 +145,37 @@ fun ProductListScreen(vm: ProductViewModel = viewModel()) {
                          }
                      },
                      modifier = Modifier
-                         .padding(16.dp),
-                     shape = RoundedCornerShape(8.dp),
+                         .size(56.dp),
+                     contentPadding = PaddingValues(0.dp), // else wand icon ends up tiny
                      colors = ButtonDefaults.buttonColors(
                          containerColor = MaterialTheme.colorScheme.primary
                      )
                  ) {
-                     Text("Nutella", color = MaterialTheme.colorScheme.onPrimary)
+                     Icon(
+                         painter = painterResource(R.drawable.wand_stars_24px),
+                         contentDescription = "Spawn Nutella",
+                         modifier = Modifier.size(32.dp), // also set size here
+                     )
                  }
 
                  Button(onClick = {
                     val intent: Intent = Intent(context, barcodeActivity::class.java)
                     context.startActivity(intent)
-                 }) { Text("Camera") }
+                 },
+                     modifier = Modifier
+                         .size(56.dp),
+                     contentPadding = PaddingValues(0.dp), // else wand icon ends up tiny
+                     colors = ButtonDefaults.buttonColors(
+                         containerColor = MaterialTheme.colorScheme.primary
+                     )
+                 )
+                 {
+                     Icon(
+                         painter = painterResource(R.drawable.camera_24px),
+                         contentDescription = "Camera",
+                         modifier = Modifier.size(32.dp), // also set size here
+                     )
+                 }
              }
 
         }
@@ -198,7 +219,7 @@ fun ProductCard(product: Product, index: Int, onButtonClick: () -> Unit, vm: Pro
                     Text(
                         text =product.product_name,
                         color = MaterialTheme.colorScheme.onSurface,
-                        fontWeight = FontWeight.ExtraBold,
+                        fontWeight = FontWeight.Black,
                         fontSize = 20.sp,
                     )
                     Spacer(
