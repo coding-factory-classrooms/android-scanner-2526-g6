@@ -31,8 +31,6 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import coil.compose.AsyncImage
 import com.example.scanner.barcode.barcodeActivity
-import com.example.scanner.common.ApiCall
-import com.example.scanner.common.ApiResponse
 import com.example.scanner.productDetail.ProductDetailActivity
 import com.example.scanner.ui.theme.ScannerTheme
 
@@ -65,15 +63,7 @@ fun ProductListScreen(vm: ProductViewModel = viewModel()) {
 
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
         Column {
-            Button(onClick = {
-                val response = ApiCall("3017624010701")
-                if (response is ApiResponse.Success) {
-                    vm.createProduct(response.product)
-                    println("database ${vm.getProducts()}")
-                } else {
-                    println("failed")
-                }
-            }
+            Button(onClick = {vm.CreateDefaultProduct()}
             ) { Text("Button Nutella") }
             Button(onClick = {
                 val intent: Intent = Intent(context, barcodeActivity::class.java)

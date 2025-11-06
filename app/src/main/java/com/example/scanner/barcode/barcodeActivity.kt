@@ -11,10 +11,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.example.barcodescanner.BarcodeScannerScreen
-import com.example.scanner.R
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.scanner.common.ApiCall
 import com.example.scanner.common.ApiResponse

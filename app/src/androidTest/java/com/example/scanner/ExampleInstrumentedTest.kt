@@ -2,7 +2,6 @@ package com.example.scanner
 
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider
-import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.scanner.products.Product
 import com.example.scanner.products.ProductViewModel
@@ -14,11 +13,6 @@ import org.junit.runner.RunWith
 import org.junit.Assert.*
 import org.junit.Before
 
-/**
- * Instrumented test, which will execute on an Android device.
- *
- * See [testing documentation](http://d.android.com/tools/testing).
- */
 @RunWith(AndroidJUnit4::class)
 class ExampleInstrumentedTest {
     private lateinit var viewModel: ProductViewModel
@@ -42,7 +36,7 @@ class ExampleInstrumentedTest {
         val products = viewModel.getProducts()
 
         assertTrue(products.isNotEmpty())
-        println("✅ Product list contains: ${products.map { it.product_name }}")
+        println("Product list contains: ${products.map { it.product_name }}")
     }
 
     @Test
@@ -57,7 +51,7 @@ class ExampleInstrumentedTest {
 
         val result = viewModel.getProductById(1)
         assertNotNull(result)
-        println("✅ Found product: ${result?.product_name}")
+        println("Found product: ${result?.product_name}")
     }
 
     @Test
