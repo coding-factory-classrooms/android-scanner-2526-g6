@@ -1,5 +1,6 @@
 package com.example.scanner.products
 
+import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -22,15 +23,18 @@ import com.example.scanner.models.ApiCall
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.scanner.R
+import com.example.scanner.productDetail.ProductDetailActivity
 import com.example.scanner.ui.theme.ScannerTheme
 
 @Composable
 fun ProductListScreen(vm: ProductViewModel = viewModel()) {
 
     val state by vm.productFlow.collectAsState();
+    val context = LocalContext.current
 
     LaunchedEffect(Unit) { // useEffect -> executed on load once // UNIT -> void
         vm.LoadProduct()
@@ -45,7 +49,12 @@ fun ProductListScreen(vm: ProductViewModel = viewModel()) {
                     .fillMaxSize()
             ) {
                 items(sampleProducts) { product ->
-                    ProductCard(product)
+                    ProductCard(product, onButtonClick = {
+                        val intent = Intent(context, ProductDetailActivity::class.java);
+                        intent.putExtra("id", product.id.toString())
+                        context.startActivity(intent)
+
+                    })
                 }
 
             }
@@ -54,7 +63,7 @@ fun ProductListScreen(vm: ProductViewModel = viewModel()) {
 }
 
 @Composable
-fun ProductCard(product: Product) {
+fun ProductCard(product: Product, onButtonClick: () -> Unit) {
     Card {
         Row(Modifier.height(100.dp).fillMaxWidth()) {
             Image(
@@ -65,14 +74,14 @@ fun ProductCard(product: Product) {
 //                Text(product.id.toString())
                 Text(product.product_name)
             }
-            SeeMoreButton()
+            SeeMoreButton( onButtonClick = onButtonClick)
         }
     }
 }
 
 @Composable
-fun SeeMoreButton() {
-    OutlinedButton(onClick = {}) {
+fun SeeMoreButton(onButtonClick: () -> Unit) {
+    OutlinedButton(onClick = onButtonClick) {
         Text(text="See more")
     }
 }

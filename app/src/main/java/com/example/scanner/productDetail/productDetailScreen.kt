@@ -25,6 +25,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.scanner.R
+import com.example.scanner.products.Product
+import com.example.scanner.products.fakeProduct
 import com.example.scanner.ui.theme.ScannerTheme
 
 
@@ -44,23 +46,7 @@ fun ProductDetailScreen(productId: String, vm: ProductDetailViewModel = viewMode
                 Toast.makeText(context, s.message, Toast.LENGTH_SHORT).show()
             }
             is ProductDetailUiState.Success -> {
-                Scaffold() { innerPadding ->
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(innerPadding),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                ) {
-                    Text(s.product.product_name)
-                    Image(
-                        painter = painterResource(R.drawable.ic_launcher_background),
-                        contentDescription = "",
-                        modifier = Modifier
-                            .clip(CircleShape)
-                            .size(180.dp)
-                    )
-                }
-            }
+                productDetailSuccessBody(s.product)
             }
 
         }
@@ -68,10 +54,31 @@ fun ProductDetailScreen(productId: String, vm: ProductDetailViewModel = viewMode
 
 }
 
+@Composable
+private fun productDetailSuccessBody(product: Product) {
+    Scaffold() { innerPadding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Text(product.product_name)
+            Image(
+                painter = painterResource(R.drawable.ic_launcher_background),
+                contentDescription = "",
+                modifier = Modifier
+                    .clip(CircleShape)
+                    .size(180.dp)
+            )
+        }
+    }
+}
+
 @Preview
 @Composable
-fun LoginScreenPreview () {
+fun ProductDetailScreenPreview () {
     ScannerTheme {
-        ProductDetailScreen("123")
+        productDetailSuccessBody(fakeProduct)
     }
 }
