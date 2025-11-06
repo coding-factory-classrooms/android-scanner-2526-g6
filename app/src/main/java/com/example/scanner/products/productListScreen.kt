@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
@@ -40,9 +41,11 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -62,7 +65,6 @@ import com.google.android.material.progressindicator.CircularProgressIndicator
 
 @Composable
 fun ProductListScreen(vm: ProductViewModel = viewModel()) {
-
     val state by vm.productFlow.collectAsState();
 
     val context = LocalContext.current
@@ -75,23 +77,26 @@ fun ProductListScreen(vm: ProductViewModel = viewModel()) {
     LaunchedEffect(Unit) { // useEffect -> executed on load once // UNIT -> void
         vm.LoadProduct()
     }
-
     DisposableEffect(lifecycleOwner) {
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_RESUME) {
                 vm.LoadProduct()
             }
         }
-
         lifecycleOwner.lifecycle.addObserver(observer)
-
         onDispose {
             lifecycleOwner.lifecycle.removeObserver(observer)
         }
     }
 
+    val configuration = LocalConfiguration.current
+    val screenHeight = configuration.screenHeightDp.dp // get screen height for Min Box Size
+
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding -> // ?
-         Box(modifier = Modifier.fillMaxSize().padding(innerPadding)) { // added this to have a floating action button
+         Box(modifier = Modifier
+             .fillMaxWidth()
+             .padding(innerPadding)
+         ) { // box will help contain floating action button
             when (state) {
                 is ProductListUiState.Failure -> Text("failed")
                 ProductListUiState.Initial -> CircularProgressIndicator()
@@ -101,7 +106,9 @@ fun ProductListScreen(vm: ProductViewModel = viewModel()) {
                         columns = GridCells.Adaptive(minSize = 180.dp),
                         contentPadding = PaddingValues(16.dp),
                         horizontalArrangement = Arrangement.spacedBy(12.dp),
-                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                        verticalArrangement = Arrangement.spacedBy(12.dp),
+                        modifier = Modifier.heightIn(min = screenHeight) // grid should always be screen height
+                                                                         // else card elevation looks cut off
                     ) {
                         itemsIndexed((state as ProductListUiState.Success).products!!) { index, product ->
                             ProductCard(product, index, onButtonClick = {
@@ -111,23 +118,9 @@ fun ProductListScreen(vm: ProductViewModel = viewModel()) {
 
                             })
                         }
-
-                }
-
+                    }
                 }
             }
-
-//             Button(onClick = {
-//                 val response = ApiCall("3017624010701")
-//                 if (response is ApiResponse.Success) {
-//                     vm.createProduct(response.product)
-//                     println("database ${vm.getProducts()}")
-//                 } else {
-//                     println("failed")
-//                 }
-//             }
-//             ) { Text("Button Nutella") }  // old nutella button
-
 
              Row(  // fit 2 overlayed floating action buttons
                  modifier = Modifier
