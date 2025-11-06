@@ -1,7 +1,12 @@
 package com.example.scanner.common
 
+import androidx.compose.runtime.Composable
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.scanner.products.Product
 import com.example.scanner.products.ProductResponse
+import com.example.scanner.products.ProductViewModel
+import com.google.android.gms.common.api.Api
 import kotlinx.coroutines.runBlocking
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -26,7 +31,8 @@ suspend fun fetchProduct(service: ProductService, barcode: String) : ApiResponse
     }
 }
 
-fun ApiCall(barcode: String) : ApiResponse = runBlocking { // execution blocked until received response
+fun ApiCall(barcode: String) : ApiResponse = runBlocking {
+    // execution blocked until received response
     val BASE_URL = "https://world.openfoodfacts.net/";
     val retrofit : Retrofit = Retrofit.Builder()
         .baseUrl(BASE_URL)
@@ -34,8 +40,6 @@ fun ApiCall(barcode: String) : ApiResponse = runBlocking { // execution blocked 
         .build()
     val service = retrofit.create(ProductService::class.java)
     var product: ApiResponse = fetchProduct(service, barcode)
-
-    println(product)
 
     return@runBlocking product;
 }
