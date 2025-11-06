@@ -21,6 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -30,6 +31,7 @@ import com.example.scanner.barcode.barcodeActivity
 import com.example.scanner.common.ApiCall
 import com.example.scanner.common.ApiResponse
 import com.example.scanner.ui.theme.ScannerTheme
+import com.google.android.material.progressindicator.CircularProgressIndicator
 
 @Composable
 fun ProductListScreen(vm: ProductViewModel = viewModel()) {
@@ -38,9 +40,9 @@ fun ProductListScreen(vm: ProductViewModel = viewModel()) {
 
     val context = LocalContext.current
 
-    vm.createProduct(Product("bouteille"))
-    val storedProduct = vm.getProducts()
-    println( "storedproduct $storedProduct")
+//    vm.createProduct(Product("bouteille"))
+//    val storedProduct = vm.getProducts()
+//    println( "storedproduct $storedProduct")
 
     LaunchedEffect(Unit) { // useEffect -> executed on load once // UNIT -> void
         vm.LoadProduct()
@@ -62,15 +64,19 @@ fun ProductListScreen(vm: ProductViewModel = viewModel()) {
                 val intent: Intent = Intent(context, barcodeActivity::class.java)
                 context.startActivity(intent)
             }){ Text("Camera")}
-            LazyColumn( // RecyclerView
-                modifier = Modifier
-                    .padding(innerPadding)
-                    .fillMaxSize()
-            ) {
-                items(sampleProducts) { product ->
-                    ProductCard(product)
-                }
+            when(state) {
+                is ProductListUiState.Failure -> Text("failed")
+                ProductListUiState.Initial -> CircularProgressIndicator()
+                is ProductListUiState.Success -> LazyColumn( // RecyclerView
+                    modifier = Modifier
+                        .padding(innerPadding)
+                        .fillMaxSize()
+                ) {
+                    items((state as ProductListUiState.Success).products!!) { product ->
+                        ProductCard(product)
+                    }
 
+                }
             }
         }
     }
