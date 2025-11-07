@@ -1,10 +1,12 @@
 package com.example.scanner.products
 
+import android.R.color.white
 import com.example.scanner.ui.theme.ScannerTheme
 
 import android.content.Intent
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -37,6 +39,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material3.ButtonColors
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonDefaults
@@ -47,6 +50,15 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.VerticalAlignmentLine
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.minimumInteractiveComponentSize
@@ -84,6 +96,8 @@ fun ProductListScreen(vm: ProductViewModel = viewModel()) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
 
+    var recherche by remember { mutableStateOf("")}
+
 //    vm.createProduct(Product("bouteille"))
 //    val storedProduct = vm.getProducts()
 //    println( "storedproduct $storedProduct")
@@ -102,6 +116,24 @@ fun ProductListScreen(vm: ProductViewModel = viewModel()) {
             lifecycleOwner.lifecycle.removeObserver(observer)
         }
     }
+
+    Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+        Column {
+            Row(
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                OutlinedTextField(
+                    label = { Text("recherche") } ,
+                    value = recherche,
+                    onValueChange = {
+                        recherche = it
+                        vm.searchProducts(it)}
+                )
+                Button(onClick = {vm.searchProducts(recherche)} ){
+                    Text("🔍")
+                }
+            }
 
     val configuration = LocalConfiguration.current
     val screenHeight = configuration.screenHeightDp.dp // get screen height for Min Box Size
