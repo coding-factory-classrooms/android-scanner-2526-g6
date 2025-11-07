@@ -126,7 +126,10 @@ private fun productDetailSuccessBody(product: Product, productId: Int , vm: Prod
                 confirmButton = {
                     TextButton(onClick = {
                         showDialog = false
-                        pvm.updateProduct(productId, textInput/*, context*/)
+                        if(!pvm.updateProduct(productId, textInput)) {
+                            Toast.makeText(context, "Impossible", Toast.LENGTH_SHORT).show()
+                        }
+
                         productName = textInput
                         textInput = ""
                     }) {

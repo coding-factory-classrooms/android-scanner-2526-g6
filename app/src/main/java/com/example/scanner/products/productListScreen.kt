@@ -4,6 +4,7 @@ import android.R.color.white
 import com.example.scanner.ui.theme.ScannerTheme
 
 import android.content.Intent
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -234,7 +235,9 @@ fun ProductCard(product: Product, index: Int, onButtonClick: () -> Unit, vm: Pro
     ) {
         Card(
             onClick = onButtonClick,
-            modifier = Modifier.fillMaxWidth().fillMaxHeight(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight(),
             elevation = CardDefaults.cardElevation(15.dp),
             colors = CardDefaults.cardColors(
                 containerColor = MaterialTheme.colorScheme.surface
@@ -283,7 +286,11 @@ fun ProductCard(product: Product, index: Int, onButtonClick: () -> Unit, vm: Pro
                         )
                     }
                     Button(
-                        onClick = { vm.DeleteProduct(index/*, context*/) },
+                        onClick = { if(!vm.DeleteProduct(index)) Toast.makeText(
+                            context,
+                            "Impossible",
+                            Toast.LENGTH_SHORT
+                        ).show() },
                         modifier = Modifier
                             .size(40.dp)
                             .align(Alignment.TopEnd) // top left alignment for space efficient cards

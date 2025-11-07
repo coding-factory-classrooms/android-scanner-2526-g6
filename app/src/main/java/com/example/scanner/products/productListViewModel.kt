@@ -1,7 +1,5 @@
 package com.example.scanner.products
 
-import android.content.Context
-import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import com.example.scanner.common.ApiCall
 import com.example.scanner.common.ApiResponse
@@ -100,23 +98,25 @@ class ProductViewModel(
     }
 
     //Delete product with associated id in bdd local with key products
-    fun DeleteProduct(ProductIndex: Int/*, context: Context */) {
-        var ProductList = data.readAll()
-//        if (ProductList!!.size == 0){
-//            return Toast.makeText(context, "impossible", Toast.LENGTH_SHORT).show()
-//        }
+    fun DeleteProduct(ProductIndex: Int) : Boolean {
+        val productList = data.readAll()
+        if (productList!!.isEmpty()){
+            return false
+        }
         data.delete(ProductIndex)
         LoadProduct()
+        return true
     }
 
-    fun updateProduct( productIndex: Int, title: String/* ,context: Context */) {
-//        var productList = Paper.book().read("products", mutableListOf<Product>())!!
-//        if (productList.isEmpty()){
-//            return Toast.makeText(context, "impossible", Toast.LENGTH_SHORT).show()
-//        }
+    fun updateProduct( productIndex: Int, title: String) : Boolean {
+        var productList = Paper.book().read("products", mutableListOf<Product>())!!
+        if (productList.isEmpty()){
+            return false
+        }
 
         data.update(productIndex, title)
         LoadProduct()
+        return true
     }
 
     fun searchProducts(query: String) : List<Product> {
