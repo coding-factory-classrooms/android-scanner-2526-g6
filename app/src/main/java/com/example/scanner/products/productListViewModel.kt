@@ -5,8 +5,10 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import com.example.scanner.common.ApiCall
 import com.example.scanner.common.ApiResponse
+import com.example.scanner.common.ProductData
 import io.paperdb.Paper
 import kotlinx.coroutines.flow.MutableStateFlow
+import java.util.Collections.emptyList
 
 sealed class ProductListUiState {
     data object Initial : ProductListUiState() // mark as object when no attributes // LOADING state
@@ -14,39 +16,65 @@ sealed class ProductListUiState {
     data class Failure(val message: String) : ProductListUiState()
 }
 
-class ProductViewModel() : ViewModel() {
+class PapersData() : ProductData {
+
+    override fun write(products: MutableList<Product>) {
+        Paper.book().write("products", products)
+    }
+
+    override fun add(product: Product) {
+        val products = readAll()
+        products!!.add(product)
+        write(products)
+    }
+
+    override fun getById(id: Int) : Product{
+        val products = readAll()
+        return products!!.get(id)
+    }
+
+    override fun readAll() : MutableList<Product>? {
+        return Paper.book().read("products", mutableListOf<Product>())
+    }
+
+    override fun delete(id: Int) {
+        val products = readAll()
+        products!!.removeAt(id)
+        write(products);
+    }
+
+    override fun update(id: Int, newName: String) {
+        val products = readAll();
+        val product = products!!.get(id)
+        product.product_name = newName
+        write(products)
+    }
+}
+
+class ProductViewModel(
+    private val data: ProductData = PapersData()
+) : ViewModel() {
 
     val productFlow = MutableStateFlow<ProductListUiState>(ProductListUiState.Initial) // store page state -> ProductListUiState.Loading = initial state
 
     //Create Product
-    fun createProduct(product: Product) {
-        println(product.product_name)
-        println(product.brands)
-        println(product._id)
-        println(product.image_url)
-        var ProductList = Paper.book().read("products", mutableListOf<Product>())
-        ProductList!!.add(product)
-        Paper.book().write("products", ProductList)
-    }
-
-    //Create Product by default without cam
-    fun CreateDefaultProduct () {
-
-        val response = ApiCall("3017624010701")
-        if (response is ApiResponse.Success) {
-            createProduct(response.product)
-            println("database ${getProducts()}")
-        } else {
-            println("failed")
+    fun createProduct(barcode: String) : Boolean{
+        try {
+            val product = (ApiCall(barcode) as ApiResponse.Success).product
+            data.add(product)
+            LoadProduct()
+            return true
+        } catch(e: Exception) {
+            println(e)
+            return false;
         }
-
     }
 
     //Get all product with Key products in bdd local
-    fun getProducts(): List<Product> {
+    fun getProducts(): MutableList<Product>? {
         try {
-            productFlow.value = ProductListUiState.Success(Paper.book().read("products", mutableListOf<Product>()))
-            return Paper.book().read("products", mutableListOf<Product>())!!
+            productFlow.value = ProductListUiState.Success(data.readAll())
+            return data.readAll()
         } catch (e : Exception){
             productFlow.value = ProductListUiState.Failure("Erreur")
             println("erreur")
@@ -57,9 +85,7 @@ class ProductViewModel() : ViewModel() {
     //Get specified product in local bdd with id
     fun getProductById(id : Int): Product? {
         try {
-            productFlow.value = ProductListUiState.Success(Paper.book().read("products", mutableListOf<Product>()))
-            val t = Paper.book().read("products", mutableListOf<Product>())!!
-            return t.get(id)
+            return data.getById(id)
         } catch (e : Exception){
             productFlow.value = ProductListUiState.Failure("Erreur")
             println("erreur")
@@ -74,37 +100,37 @@ class ProductViewModel() : ViewModel() {
     }
 
     //Delete product with associated id in bdd local with key products
-    fun DeleteProduct(ProductIndex: Int, context: Context ) {
-        var ProductList = Paper.book().read("products", mutableListOf<Product>())!!
-        if (ProductList.size == 0){
-            return Toast.makeText(context, "impossible", Toast.LENGTH_SHORT).show()
-        }
-        ProductList.removeAt(ProductIndex)
-        Paper.book().write("products", ProductList)
+    fun DeleteProduct(ProductIndex: Int/*, context: Context */) {
+        var ProductList = data.readAll()
+//        if (ProductList!!.size == 0){
+//            return Toast.makeText(context, "impossible", Toast.LENGTH_SHORT).show()
+//        }
+        data.delete(ProductIndex)
         LoadProduct()
     }
 
-    fun updateProduct( productIndex: Int, title: String ,context: Context ) {
-        var productList = Paper.book().read("products", mutableListOf<Product>())!!
-        if (productList.isEmpty()){
-            return Toast.makeText(context, "impossible", Toast.LENGTH_SHORT).show()
-        }
+    fun updateProduct( productIndex: Int, title: String/* ,context: Context */) {
+//        var productList = Paper.book().read("products", mutableListOf<Product>())!!
+//        if (productList.isEmpty()){
+//            return Toast.makeText(context, "impossible", Toast.LENGTH_SHORT).show()
+//        }
 
-        productList.get(productIndex).product_name = title
-        Paper.book().write("products", productList)
+        data.update(productIndex, title)
         LoadProduct()
     }
 
-    fun searchProducts(query: String) {
+    fun searchProducts(query: String) : List<Product> {
         try {
-            val allProduct = Paper.book().read("products", mutableListOf<Product>())!!
-            val filteredList = allProduct.filter { product ->
-                product.product_name.contains(query, ignoreCase = true)
+            val allProduct = data.readAll()
+            val filteredList = allProduct!!.filter { product ->
+                product.product_name.contains(query.trim(), ignoreCase = true)
             }
             productFlow.value = ProductListUiState.Success(filteredList.toMutableList())
+            return filteredList
         }catch (e: Exception){
             val message = "erreur recherche"
             productFlow.value = ProductListUiState.Failure(message)
+            return emptyList<Product>()
         }
 
     }

@@ -175,7 +175,7 @@ fun ProductListScreen(vm: ProductViewModel = viewModel()) {
              ) {
                  Button( // Magic Button uhihi
                      onClick = {
-                         vm.CreateDefaultProduct()
+                         vm.createProduct("3017624010701")
                      },
                      modifier = Modifier
                          .size(56.dp),
@@ -283,7 +283,7 @@ fun ProductCard(product: Product, index: Int, onButtonClick: () -> Unit, vm: Pro
                         )
                     }
                     Button(
-                        onClick = { vm.DeleteProduct(index, context) },
+                        onClick = { vm.DeleteProduct(index/*, context*/) },
                         modifier = Modifier
                             .size(40.dp)
                             .align(Alignment.TopEnd) // top left alignment for space efficient cards

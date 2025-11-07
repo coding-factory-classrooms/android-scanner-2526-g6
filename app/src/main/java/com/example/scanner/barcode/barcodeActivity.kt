@@ -39,11 +39,8 @@ fun Barcode(Productvm: ProductViewModel = viewModel()) {
         {
             if(reading) {
                 reading = false
-                val product : ApiResponse = ApiCall(it)
 
-                println((product as ApiResponse.Success).product.product_name)
-
-                Productvm.createProduct(product.product)
+                Productvm.createProduct(it)
                 println(Productvm.getProducts())
 
                 (context as Activity?)?.finish();
