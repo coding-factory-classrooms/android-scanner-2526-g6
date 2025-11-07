@@ -16,7 +16,7 @@ import java.util.Collections.emptyList
 class MockData : ProductData {
     var List = mutableListOf<Product>()
 
-    override fun write(products: MutableList<Product>) {
+    override fun write(products: List<Product>) {
         TODO("Not yet implemented")
     }
 

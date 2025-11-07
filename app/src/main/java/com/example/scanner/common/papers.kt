@@ -4,7 +4,7 @@ import com.example.scanner.products.Product
 import io.paperdb.Paper
 
 interface ProductData {
-    fun write(products: MutableList<Product>)
+    fun write(products: List<Product>)
     fun add(product: Product)
     fun getById(id: Int) : Product
     fun readAll(): MutableList<Product>?

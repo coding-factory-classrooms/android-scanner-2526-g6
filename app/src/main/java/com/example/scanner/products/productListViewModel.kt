@@ -10,13 +10,13 @@ import java.util.Collections.emptyList
 
 sealed class ProductListUiState {
     data object Initial : ProductListUiState() // mark as object when no attributes // LOADING state
-    data class Success(val products: MutableList<Product>?) : ProductListUiState()
+    data class Success(val products: List<Product>?) : ProductListUiState()
     data class Failure(val message: String) : ProductListUiState()
 }
 
 class PapersData() : ProductData {
 
-    override fun write(products: MutableList<Product>) {
+    override fun write(products: List<Product>) {
         Paper.book().write("products", products)
     }
 
@@ -109,8 +109,8 @@ class ProductViewModel(
     }
 
     fun updateProduct( productIndex: Int, title: String) : Boolean {
-        var productList = Paper.book().read("products", mutableListOf<Product>())!!
-        if (productList.isEmpty()){
+        var productList = data.readAll()
+        if (productList!!.isEmpty()){
             return false
         }
 
