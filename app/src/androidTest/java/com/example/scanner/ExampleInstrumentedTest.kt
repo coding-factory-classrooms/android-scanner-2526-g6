@@ -1,6 +1,7 @@
 package com.example.scanner
 
 import android.content.Context
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.scanner.products.Product
@@ -52,6 +53,17 @@ class ExampleInstrumentedTest {
         val result = viewModel.getProductById(1)
         assertNotNull(result)
         println("Found product: ${result?.product_name}")
+    }
+
+    @Test
+    fun testUpdateProduct() {
+        val p1 = Product("1", "Cristalline", "", "")
+
+        viewModel.createProduct(p1)
+
+        viewModel.updateProduct(0, "test", context)
+
+        assertEquals("test", viewModel.getProductById(0)!!.product_name)
     }
 
     @Test

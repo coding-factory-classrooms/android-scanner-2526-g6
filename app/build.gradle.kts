@@ -55,6 +55,7 @@ dependencies {
     implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation ("io.github.pilgr:paperdb:2.7.2")
     implementation("io.coil-kt:coil-compose:2.6.0")
+    implementation("androidx.compose.material:material-icons-extended:1.7.7")
 
     //For barrecode
     implementation("com.google.mlkit:barcode-scanning:17.2.0")

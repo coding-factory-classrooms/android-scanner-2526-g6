@@ -2,7 +2,7 @@ package com.example.scanner.products
 
 data class Product (
     val _id: String, // noted "code" in API response
-    val product_name: String,
+    var product_name: String,
     val image_url: String,
     val brands: String
 )
