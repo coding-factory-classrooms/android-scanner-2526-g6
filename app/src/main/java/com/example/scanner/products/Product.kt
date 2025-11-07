@@ -30,5 +30,5 @@ val sampleProducts = listOf(
     )
 */
 
-val fakeProduct = Product("123", "Faux Produit tres bon", "https://images.openfoodfacts.net/images/products/405/648/964/1018/front_fr.3.400.jpg", "Test")
-val newProduct = Product("123", "Faux Produit tres bon", "https://images.openfoodfacts.net/images/products/405/648/964/1018/front_fr.3.400.jpg", "Test")
+//val fakeProduct = Product("123", "Faux Produit tres bon", "https://images.openfoodfacts.net/images/products/405/648/964/1018/front_fr.3.400.jpg", "Test")
+//val newProduct = Product("123", "Faux Produit tres bon", "https://images.openfoodfacts.net/images/products/405/648/964/1018/front_fr.3.400.jpg", "Test")

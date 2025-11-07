@@ -39,7 +39,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.example.scanner.products.Product
 import com.example.scanner.products.ProductViewModel
-import com.example.scanner.products.fakeProduct
 import com.example.scanner.ui.theme.ScannerTheme
 
 

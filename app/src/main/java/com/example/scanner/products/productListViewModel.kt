@@ -26,7 +26,11 @@ class PapersData() : ProductData {
         val products = readAll()
         val existingIndex = products!!.indexOfFirst {it._id == product._id}
         if (existingIndex != -1){
+            val wasFavorite = products[existingIndex].favorite
             products[existingIndex] = product
+            if (wasFavorite) {
+                products[existingIndex].favorite = true
+            }
         }else{
             products.add(product)
         }
