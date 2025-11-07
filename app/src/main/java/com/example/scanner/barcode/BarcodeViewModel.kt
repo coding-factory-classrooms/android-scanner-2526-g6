@@ -20,6 +20,7 @@ class BarcodeViewModel : ViewModel() {
     private val _barcode = MutableStateFlow<String?>(null)
     val barcode: StateFlow<String?> = _barcode
 
+    //setup camera
     fun startCamera(context: Context, previewView: PreviewView, lifecycleOwner: androidx.lifecycle.LifecycleOwner) {
         viewModelScope.launch {
             val cameraProvider = ProcessCameraProvider.getInstance(context).get()

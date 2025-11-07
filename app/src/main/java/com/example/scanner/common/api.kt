@@ -1,28 +1,26 @@
 package com.example.scanner.common
 
-import androidx.compose.runtime.Composable
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.scanner.products.Product
 import com.example.scanner.products.ProductResponse
-import com.example.scanner.products.ProductViewModel
-import com.google.android.gms.common.api.Api
 import kotlinx.coroutines.runBlocking
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Path
 
+//set path api
 interface ProductService {
     @GET("api/v2/product/{barcode}")
     suspend fun getProduct(@Path("barcode") barcode: String) : ProductResponse; // suspend = async fun
 }
 
+//Etat de la réponse api
 sealed class ApiResponse() {
     data class Success(val product: Product) : ApiResponse()
     data class Failed(val message: String): ApiResponse()
 }
 
+//set product in class product
 suspend fun fetchProduct(service: ProductService, barcode: String) : ApiResponse {
     return try {
         ApiResponse.Success(service.getProduct(barcode).product)
@@ -32,6 +30,7 @@ suspend fun fetchProduct(service: ProductService, barcode: String) : ApiResponse
     }
 }
 
+//call api
 fun ApiCall(barcode: String) : ApiResponse = runBlocking {
     // execution blocked until received response
     val BASE_URL = "https://world.openfoodfacts.net/";
