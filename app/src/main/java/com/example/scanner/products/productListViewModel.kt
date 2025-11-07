@@ -1,5 +1,7 @@
 package com.example.scanner.products
 
+import android.content.Context
+import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import com.example.scanner.common.ApiCall
 import com.example.scanner.common.ApiResponse
