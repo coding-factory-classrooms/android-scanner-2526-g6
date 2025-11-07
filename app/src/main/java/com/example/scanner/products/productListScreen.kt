@@ -11,6 +11,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -61,12 +62,14 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.tooling.parseSourceInformation
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -122,16 +125,27 @@ fun ProductListScreen(vm: ProductViewModel = viewModel()) {
             Row(
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.height(IntrinsicSize.Min)
             ) {
                 OutlinedTextField(
                     label = { Text("recherche") } ,
                     value = recherche,
                     onValueChange = {
                         recherche = it
-                        vm.searchProducts(it)}
+                        vm.searchProducts(it)},
+                    shape = RoundedCornerShape(topStart = 50.dp, bottomStart = 50.dp ),
+                    modifier = Modifier.fillMaxHeight()
                 )
-                Button(onClick = {vm.searchProducts(recherche)} ){
-                    Text("🔍")
+                Button(
+                    onClick = {vm.searchProducts(recherche)},
+                    shape = RoundedCornerShape(topEnd = 50.dp, bottomEnd = 50.dp ),
+                    modifier = Modifier.fillMaxHeight()
+                ){
+                    Icon(
+                        painter = painterResource(  R.drawable.search_24px),
+                        contentDescription = "Search",
+                        tint = colorResource(white)
+                    )
                 }
             }
 

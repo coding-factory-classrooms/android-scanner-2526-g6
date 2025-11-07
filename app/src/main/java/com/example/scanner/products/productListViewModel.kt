@@ -22,7 +22,12 @@ class PapersData() : ProductData {
 
     override fun add(product: Product) {
         val products = readAll()
-        products!!.add(product)
+        val existingIndex = products!!.indexOfFirst {it._id == product._id}
+        if (existingIndex != -1){
+            products[existingIndex] = product
+        }else{
+            products.add(product)
+        }
         write(products)
     }
 
@@ -47,6 +52,13 @@ class PapersData() : ProductData {
         product.product_name = newName
         write(products)
     }
+
+    fun updateDateTime(id: Int, newDateTime: String ) {
+        val  products = readAll();
+        val product = products!!.get(id)
+        product.date_time = newDateTime
+        write(products)
+    }
 }
 
 class ProductViewModel(
@@ -59,6 +71,9 @@ class ProductViewModel(
     fun createProduct(barcode: String) : Boolean{
         try {
             val product = (ApiCall(barcode) as ApiResponse.Success).product
+            val sdf = java.text.SimpleDateFormat("dd/MM/yyyy HH:mm", java.util.Locale.getDefault())
+            val currentDateAndTime = sdf.format(java.util.Date())
+            product.date_time = currentDateAndTime
             data.add(product)
             LoadProduct()
             return true

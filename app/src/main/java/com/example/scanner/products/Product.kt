@@ -4,7 +4,8 @@ data class Product (
     val _id: String, // noted "code" in API response
     var product_name: String,
     val image_url: String,
-    val brands: String
+    val brands: String,
+    var date_time : String,
 )
 data class ProductResponse(
     val product: Product
@@ -25,5 +26,5 @@ val sampleProducts = listOf(
     )
 */
 
-val fakeProduct = Product("123", "Faux Produit tres bon", "https://images.openfoodfacts.net/images/products/405/648/964/1018/front_fr.3.400.jpg", "Test")
-val newProduct = Product("123", "Faux Produit tres bon", "https://images.openfoodfacts.net/images/products/405/648/964/1018/front_fr.3.400.jpg", "Test")
+val fakeProduct = Product("123", "Faux Produit tres bon", "https://images.openfoodfacts.net/images/products/405/648/964/1018/front_fr.3.400.jpg", "Test","")
+//val newProduct = Product("123", "Faux Produit tres bon", "https://images.openfoodfacts.net/images/products/405/648/964/1018/front_fr.3.400.jpg", "Test")
