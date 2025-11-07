@@ -340,6 +340,11 @@ fun ProductCard(product: Product, index: Int, onButtonClick: () -> Unit, vm: Pro
                         maxLines = 1, // else cards grid imbalance
                         overflow = TextOverflow.Ellipsis
                     )
+                    Text(
+                        text = product.date_time,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        fontSize = 12.sp,
+                    )
                     Spacer(
                         modifier = Modifier.padding(2.dp)
                     )
@@ -353,14 +358,6 @@ fun ProductCard(product: Product, index: Int, onButtonClick: () -> Unit, vm: Pro
                         )
                     Spacer(
                         modifier = Modifier.padding(2.dp)
-                    )
-                    Text(
-                        text = product.date_time,
-                        color = MaterialTheme.colorScheme.onSurface,
-                        fontWeight = FontWeight.Black,
-                        fontSize = 20.sp,
-                        maxLines = 1, // else cards grid imbalance
-                        overflow = TextOverflow.Ellipsis
                     )
                     Text(
                         text = "See more",
