@@ -80,6 +80,17 @@ class ProductViewModel() : ViewModel() {
         LoadProduct()
     }
 
+    fun updateProduct( productIndex: Int, title: String ,context: Context ) {
+        var productList = Paper.book().read("products", mutableListOf<Product>())!!
+        if (productList.isEmpty()){
+            return Toast.makeText(context, "impossible", Toast.LENGTH_SHORT).show()
+        }
+
+        productList.get(productIndex).product_name = title
+        Paper.book().write("products", productList)
+        LoadProduct()
+    }
+
     fun searchProducts(query: String) {
         try {
             val allProduct = Paper.book().read("products", mutableListOf<Product>())!!
