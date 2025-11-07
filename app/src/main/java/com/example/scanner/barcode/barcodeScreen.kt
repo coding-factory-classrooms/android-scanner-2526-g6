@@ -1,6 +1,7 @@
 // BarcodeScannerScreen.kt
 package com.example.barcodescanner
 
+import android.app.Activity
 import androidx.camera.view.PreviewView
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.*
@@ -9,27 +10,34 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.scanner.barcode.startCamera
+import com.example.scanner.products.ProductViewModel
 
 @Composable
-fun BarcodeScannerScreen(
-    onBarcodeScanned: (String) -> Unit,
-    viewModel: BarcodeViewModel = viewModel()
-) {
+fun Barcode(Productvm: ProductViewModel = viewModel(), bvm: BarcodeViewModel = viewModel()) {
+    var reading by remember { mutableStateOf(true) }
     val context = LocalContext.current
-    val lifecycleOwner = LocalLifecycleOwner.current
+    val lifecycleOwner = androidx.lifecycle.compose.LocalLifecycleOwner.current
     val previewView = remember { PreviewView(context) }
+    val barcode by bvm.barcode.collectAsState()
+
 
     LaunchedEffect(Unit) {
-        viewModel.startCamera(context, previewView, lifecycleOwner)
+        startCamera(context, lifecycleOwner, previewView, { scanner, imageProxy ->
+            bvm.processImage(scanner, imageProxy)
+        })
     }
 
-    // Observe barcode state
-    val barcode by viewModel.barcode.collectAsState()
-
-    // Send scanned barcode once
     LaunchedEffect(barcode) {
         barcode?.let {
-            onBarcodeScanned(it)
+            if(reading) {
+                reading = false
+
+                Productvm.createProduct(it)
+                println(Productvm.getProducts())
+
+                (context as Activity?)?.finish();
+            }
         }
     }
 

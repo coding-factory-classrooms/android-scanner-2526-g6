@@ -21,36 +21,8 @@ class BarcodeViewModel : ViewModel() {
     val barcode: StateFlow<String?> = _barcode
 
     //setup camera
-    fun startCamera(context: Context, previewView: PreviewView, lifecycleOwner: androidx.lifecycle.LifecycleOwner) {
-        viewModelScope.launch {
-            val cameraProvider = ProcessCameraProvider.getInstance(context).get()
 
-            val preview = Preview.Builder().build().apply {
-                setSurfaceProvider(previewView.surfaceProvider)
-            }
-
-            val barcodeScanner = BarcodeScanning.getClient()
-            val analysis = ImageAnalysis.Builder().build().apply {
-                setAnalyzer(ContextCompat.getMainExecutor(context)) { imageProxy ->
-                    processImage(barcodeScanner, imageProxy)
-                }
-            }
-
-            try {
-                cameraProvider.unbindAll()
-                cameraProvider.bindToLifecycle(
-                    lifecycleOwner,
-                    CameraSelector.DEFAULT_BACK_CAMERA,
-                    preview,
-                    analysis
-                )
-            } catch (e: Exception) {
-                Log.e("BARCODE", "Camera bind failed: ${e.message}")
-            }
-        }
-    }
-
-    private fun processImage(
+    fun processImage(
         scanner: com.google.mlkit.vision.barcode.BarcodeScanner,
         imageProxy: ImageProxy
     ) {
