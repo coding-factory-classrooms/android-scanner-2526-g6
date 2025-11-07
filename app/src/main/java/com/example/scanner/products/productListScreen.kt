@@ -2,7 +2,6 @@ package com.example.scanner.products
 
 import android.R.color.white
 import com.example.scanner.ui.theme.ScannerTheme
-
 import android.content.Intent
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
@@ -17,13 +16,9 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
@@ -42,6 +37,10 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.ButtonColors
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.outlined.Star
+import androidx.compose.material.icons.outlined.StarBorder
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -61,17 +60,15 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.Lifecycle
@@ -84,12 +81,13 @@ import com.example.scanner.common.ApiCall
 import com.example.scanner.common.ApiResponse
 import com.example.scanner.productDetail.ProductDetailActivity
 import com.example.scanner.ui.theme.ScannerTheme
-import com.google.android.material.progressindicator.CircularProgressIndicator
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProductListScreen(vm: ProductViewModel = viewModel()) {
     val state by vm.productFlow.collectAsState();
+
+
 
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -151,7 +149,7 @@ fun ProductListScreen(vm: ProductViewModel = viewModel()) {
                     LazyVerticalGrid(  // RecyclerView
                         columns = GridCells.Adaptive(minSize = 160.dp),
                         contentPadding = PaddingValues(15.dp), // sides
-                        horizontalArrangement = Arrangement.spacedBy(15.dp), // between elements
+                        horizontalArrangement = Arrangement.spacedBy(15.dp), // space between elements
                         verticalArrangement = Arrangement.spacedBy(15.dp),
                         modifier = Modifier.heightIn(min = screenHeight) // grid should always be screen height
                                                                          // else card elevation looks cut off
@@ -229,6 +227,8 @@ fun ProductListScreen(vm: ProductViewModel = viewModel()) {
 fun ProductCard(product: Product, index: Int, onButtonClick: () -> Unit, vm: ProductViewModel = viewModel(),) {
     val context = LocalContext.current
 
+    val isFavorite = remember { mutableStateOf(vm.isFavorite(index, context)) }
+
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
@@ -241,11 +241,8 @@ fun ProductCard(product: Product, index: Int, onButtonClick: () -> Unit, vm: Pro
             elevation = CardDefaults.cardElevation(15.dp),
             colors = CardDefaults.cardColors(
                 containerColor = MaterialTheme.colorScheme.surface
-            )) {
-//            Column(Modifier        // adding a column breaks everything so let's just not :/
-//                .height(100.dp)
-//                .fillMaxWidth())
-//            {
+            ))
+        {
                 Box (modifier = Modifier
                     .fillMaxWidth()
                     .background(Color(0xFFFFFFFF))
@@ -257,17 +254,12 @@ fun ProductCard(product: Product, index: Int, onButtonClick: () -> Unit, vm: Pro
                             .fillMaxWidth()
                             .fillMaxHeight(0.5f)
                             .padding(20.dp)
-//                            .clip(
-//                                RoundedCornerShape(
-//                                    topStart = 0.dp,
-//                                    topEnd = 0.dp,
-//                                    bottomStart = 40.dp,// only round the bottom
-//                                    bottomEnd = 40.dp
-//                                )
-//                            ),
                     )
                     Button(
-                        onClick = { TODO() }, // vm.Favorite(index, context)
+                        onClick = {
+                            vm.toggleFavorite(index, context)
+                            isFavorite.value = !isFavorite.value
+                            }, // also update here for ui refresh
                         modifier = Modifier
                             .size(40.dp)
                             .align(Alignment.TopStart) // top left alignment for space efficient cards
@@ -279,7 +271,7 @@ fun ProductCard(product: Product, index: Int, onButtonClick: () -> Unit, vm: Pro
                         ),
                     ) {
                         Icon(
-                            painter = painterResource(R.drawable.star_24px),
+                            imageVector = if (vm.isFavorite(index, context)) Icons.Filled.Star else Icons.Outlined.StarBorder,
                             contentDescription = "Favorite",
                             modifier = Modifier.size(32.dp),
                             tint = MaterialTheme.colorScheme.tertiary
@@ -295,7 +287,6 @@ fun ProductCard(product: Product, index: Int, onButtonClick: () -> Unit, vm: Pro
                             .size(40.dp)
                             .align(Alignment.TopEnd) // top left alignment for space efficient cards
                             .padding(2.dp),
-                        //shape = CircleShape,
                         contentPadding = PaddingValues(0.dp),
                         colors = ButtonDefaults.buttonColors(
                             containerColor = Color.Transparent
@@ -335,11 +326,7 @@ fun ProductCard(product: Product, index: Int, onButtonClick: () -> Unit, vm: Pro
                         color = MaterialTheme.colorScheme.secondary,
                         fontSize = 12.sp,
                     )
-
                 }
-
-//            }
-
         }
     }
 }

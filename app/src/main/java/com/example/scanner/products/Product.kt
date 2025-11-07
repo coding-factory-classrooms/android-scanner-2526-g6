@@ -4,7 +4,11 @@ data class Product (
     val _id: String, // noted "code" in API response
     var product_name: String,
     val image_url: String,
-    val brands: String
+    val brands: String,
+    var favorite: Boolean = false,
+//    val ingredients: String,
+//    val category: String,
+//    val nutritionGrade: String, // nutriscore, can be null?
 )
 data class ProductResponse(
     val product: Product

@@ -66,7 +66,7 @@ class ProductViewModel(
             println(e)
             return false;
         }
-    }
+    }   
 
     //Get all product with Key products in bdd local
     fun getProducts(): MutableList<Product>? {
@@ -134,5 +134,21 @@ class ProductViewModel(
         }
 
     }
+
+    // FAVORITES
+     fun isFavorite(ProductIndex: Int, context: Context): Boolean {
+         var ProductList = Paper.book().read("products", mutableListOf<Product>())!!
+         return ProductList[ProductIndex].favorite
+     }
+
+     fun toggleFavorite(ProductIndex: Int, context: Context ) {
+         var ProductList = Paper.book().read("products", mutableListOf<Product>())!!
+         if (ProductList.size == 0) {
+             return Toast.makeText(context, "impossible", Toast.LENGTH_SHORT).show()
+         }
+         ProductList[ProductIndex].favorite = !ProductList[ProductIndex].favorite  // invert previous favorite value
+         Paper.book().write("products", ProductList)
+         LoadProduct()
+     }
 
 }
