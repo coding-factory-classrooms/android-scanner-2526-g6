@@ -27,7 +27,6 @@ sealed class ProductListUiState {
 class ProductViewModel() : ViewModel() {
 
     val productFlow = MutableStateFlow<ProductListUiState>(ProductListUiState.Initial) // store page state -> ProductListUiState.Loading = initial state
-
     fun createProduct(product: Product) {
 
         var ProductList = Paper.book().read("products", mutableListOf<Product>())
@@ -72,5 +71,21 @@ class ProductViewModel() : ViewModel() {
         Paper.book().write("products", ProductList)
         LoadProduct()
     }
+
+    // FAVORITES
+     fun isFavorite(ProductIndex: Int, context: Context): Boolean {
+         var ProductList = Paper.book().read("products", mutableListOf<Product>())!!
+         return ProductList[ProductIndex].favorite
+     }
+
+     fun toggleFavorite(ProductIndex: Int, context: Context ) {
+         var ProductList = Paper.book().read("products", mutableListOf<Product>())!!
+         if (ProductList.size == 0) {
+             return Toast.makeText(context, "impossible", Toast.LENGTH_SHORT).show()
+         }
+         ProductList[ProductIndex].favorite = !ProductList[ProductIndex].favorite  // invert previous favorite value
+         Paper.book().write("products", ProductList)
+         LoadProduct()
+     }
 
 }
