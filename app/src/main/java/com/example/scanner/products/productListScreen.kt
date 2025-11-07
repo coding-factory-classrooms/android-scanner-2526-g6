@@ -175,13 +175,7 @@ fun ProductListScreen(vm: ProductViewModel = viewModel()) {
              ) {
                  Button( // Magic Button uhihi
                      onClick = {
-                         val response = ApiCall("3017624010701")
-                         if (response is ApiResponse.Success) {
-                             vm.createProduct(response.product)
-                             println("database ${vm.getProducts()}")
-                         } else {
-                             println("failed")
-                         }
+                         vm.CreateDefaultProduct()
                      },
                      modifier = Modifier
                          .size(56.dp),

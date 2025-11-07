@@ -20,6 +20,10 @@ class ProductViewModel() : ViewModel() {
 
     //Create Product
     fun createProduct(product: Product) {
+        println(product.product_name)
+        println(product.brands)
+        println(product._id)
+        println(product.image_url)
         var ProductList = Paper.book().read("products", mutableListOf<Product>())
         ProductList!!.add(product)
         Paper.book().write("products", ProductList)

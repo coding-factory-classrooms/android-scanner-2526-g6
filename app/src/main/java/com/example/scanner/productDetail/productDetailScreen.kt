@@ -98,7 +98,7 @@ private fun productDetailSuccessBody(product: Product, productId: Int , vm: Prod
                     .size(180.dp)
             )
             Text(productName, fontSize = 32.sp)
-            Text(product.brands)
+            Text("marque " + product.brands)
             Spacer(Modifier.height(32.dp))
             Button(onClick = {
                 val shareIntent = vm.createShareIntent(product)
