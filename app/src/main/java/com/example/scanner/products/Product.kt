@@ -9,6 +9,7 @@ data class Product (
 //    val ingredients: String,
 //    val category: String,
 //    val nutritionGrade: String, // nutriscore, can be null?
+    var date_time : String,
 )
 data class ProductResponse(
     val product: Product

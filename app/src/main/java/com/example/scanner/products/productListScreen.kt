@@ -2,6 +2,7 @@ package com.example.scanner.products
 
 import android.R.color.white
 import com.example.scanner.ui.theme.ScannerTheme
+
 import android.content.Intent
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
@@ -10,15 +11,20 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
@@ -62,13 +68,18 @@ import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.tooling.parseSourceInformation
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.Lifecycle
@@ -81,13 +92,12 @@ import com.example.scanner.common.ApiCall
 import com.example.scanner.common.ApiResponse
 import com.example.scanner.productDetail.ProductDetailActivity
 import com.example.scanner.ui.theme.ScannerTheme
+import com.google.android.material.progressindicator.CircularProgressIndicator
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProductListScreen(vm: ProductViewModel = viewModel()) {
     val state by vm.productFlow.collectAsState();
-
-
 
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -120,16 +130,27 @@ fun ProductListScreen(vm: ProductViewModel = viewModel()) {
             Row(
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.height(IntrinsicSize.Min)
             ) {
                 OutlinedTextField(
                     label = { Text("recherche") } ,
                     value = recherche,
                     onValueChange = {
                         recherche = it
-                        vm.searchProducts(it)}
+                        vm.searchProducts(it)},
+                    shape = RoundedCornerShape(topStart = 50.dp, bottomStart = 50.dp ),
+                    modifier = Modifier.fillMaxHeight()
                 )
-                Button(onClick = {vm.searchProducts(recherche)} ){
-                    Text("🔍")
+                Button(
+                    onClick = {vm.searchProducts(recherche)},
+                    shape = RoundedCornerShape(topEnd = 50.dp, bottomEnd = 50.dp ),
+                    modifier = Modifier.fillMaxHeight()
+                ){
+                    Icon(
+                        painter = painterResource(  R.drawable.search_24px),
+                        contentDescription = "Search",
+                        tint = colorResource(white)
+                    )
                 }
             }
 
@@ -149,7 +170,7 @@ fun ProductListScreen(vm: ProductViewModel = viewModel()) {
                     LazyVerticalGrid(  // RecyclerView
                         columns = GridCells.Adaptive(minSize = 160.dp),
                         contentPadding = PaddingValues(15.dp), // sides
-                        horizontalArrangement = Arrangement.spacedBy(15.dp), // space between elements
+                        horizontalArrangement = Arrangement.spacedBy(15.dp), // between elements
                         verticalArrangement = Arrangement.spacedBy(15.dp),
                         modifier = Modifier.heightIn(min = screenHeight) // grid should always be screen height
                                                                          // else card elevation looks cut off
@@ -254,6 +275,14 @@ fun ProductCard(product: Product, index: Int, onButtonClick: () -> Unit, vm: Pro
                             .fillMaxWidth()
                             .fillMaxHeight(0.5f)
                             .padding(20.dp)
+//                            .clip(
+//                                RoundedCornerShape(
+//                                    topStart = 0.dp,
+//                                    topEnd = 0.dp,
+//                                    bottomStart = 40.dp,// only round the bottom
+//                                    bottomEnd = 40.dp
+//                                )
+//                            ),
                     )
                     Button(
                         onClick = {
@@ -287,6 +316,7 @@ fun ProductCard(product: Product, index: Int, onButtonClick: () -> Unit, vm: Pro
                             .size(40.dp)
                             .align(Alignment.TopEnd) // top left alignment for space efficient cards
                             .padding(2.dp),
+                        //shape = CircleShape,
                         contentPadding = PaddingValues(0.dp),
                         colors = ButtonDefaults.buttonColors(
                             containerColor = Color.Transparent
@@ -321,12 +351,27 @@ fun ProductCard(product: Product, index: Int, onButtonClick: () -> Unit, vm: Pro
                         maxLines = 3, // else cards grid imbalance
                         overflow = TextOverflow.Ellipsis
                         )
+                    Spacer(
+                        modifier = Modifier.padding(2.dp)
+                    )
+                    Text(
+                        text = product.date_time,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        fontWeight = FontWeight.Black,
+                        fontSize = 20.sp,
+                        maxLines = 1, // else cards grid imbalance
+                        overflow = TextOverflow.Ellipsis
+                    )
                     Text(
                         text = "See more",
                         color = MaterialTheme.colorScheme.secondary,
                         fontSize = 12.sp,
                     )
+
                 }
+
+//            }
+
         }
     }
 }
