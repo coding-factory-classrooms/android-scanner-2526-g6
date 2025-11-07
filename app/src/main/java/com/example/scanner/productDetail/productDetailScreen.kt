@@ -3,10 +3,13 @@ package com.example.scanner.productDetail
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -53,7 +56,8 @@ fun ProductDetailScreen(productId: Int, vm: ProductDetailViewModel = viewModel()
 }
 
 @Composable
-private fun productDetailSuccessBody(product: Product) {
+private fun productDetailSuccessBody(product: Product, vm: ProductDetailViewModel = viewModel()) {
+    val context = LocalContext.current
     Scaffold() { innerPadding ->
         Column(
             modifier = Modifier
@@ -70,12 +74,19 @@ private fun productDetailSuccessBody(product: Product) {
             )
             Text(product.product_name, fontSize = 32.sp)
             Text(product.brands)
+            Spacer(Modifier.height(32.dp))
+            Button(onClick = {
+                val shareIntent = vm.createShareIntent(product)
+                context.startActivity(shareIntent)
+            })
+            { Text("Share button") }
         }
         Column(
             modifier = Modifier
                 .fillMaxSize()
         )
         {
+
         }
     }
 }
