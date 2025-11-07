@@ -344,11 +344,23 @@ fun ProductCard(product: Product, index: Int, onButtonClick: () -> Unit, vm: Pro
                         maxLines = 3, // else cards grid imbalance
                         overflow = TextOverflow.Ellipsis
                         )
+                    Spacer(
+                        modifier = Modifier.padding(2.dp)
+                    )
+                    Text(
+                        text = product.date_time,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        fontWeight = FontWeight.Black,
+                        fontSize = 20.sp,
+                        maxLines = 1, // else cards grid imbalance
+                        overflow = TextOverflow.Ellipsis
+                    )
                     Text(
                         text = "See more",
                         color = MaterialTheme.colorScheme.secondary,
                         fontSize = 12.sp,
                     )
+
 
                 }
 
