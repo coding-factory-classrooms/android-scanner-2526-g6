@@ -60,7 +60,7 @@ fun ProductDetailScreen(productId: Int, vm: ProductDetailViewModel = viewModel()
                 Toast.makeText(context, s.message, Toast.LENGTH_SHORT).show()
             }
             is ProductDetailUiState.Success -> {
-                productDetailSuccessBody(s.product, productId, Pvm)
+                productDetailSuccessBody(s.product, productId, vm, Pvm)
             }
 
         }
@@ -69,7 +69,7 @@ fun ProductDetailScreen(productId: Int, vm: ProductDetailViewModel = viewModel()
 }
 
 @Composable
-private fun productDetailSuccessBody(product: Product, productId: Int ,vm: ProductViewModel = viewModel()) {
+private fun productDetailSuccessBody(product: Product, productId: Int , vm: ProductDetailViewModel = viewModel(), pvm: ProductViewModel = viewModel()) {
     var showDialog by remember { mutableStateOf(false) }
     var textInput by remember { mutableStateOf("") }
     var productName by remember { mutableStateOf(product.product_name)}
@@ -126,7 +126,7 @@ private fun productDetailSuccessBody(product: Product, productId: Int ,vm: Produ
                 confirmButton = {
                     TextButton(onClick = {
                         showDialog = false
-                        vm.updateProduct(productId, textInput, context)
+                        pvm.updateProduct(productId, textInput, context)
                         productName = textInput
                         textInput = ""
                     }) {
