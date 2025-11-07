@@ -89,7 +89,7 @@ class ProductViewModel() : ViewModel() {
             productFlow.value = ProductListUiState.Success(filteredList.toMutableList())
         }catch (e: Exception){
             val message = "erreur recherche"
-            productFlow.value = ProductListUiState.Failure(message, ApiError.ERROR_500)
+            productFlow.value = ProductListUiState.Failure(message)
         }
 
     }

@@ -6,7 +6,6 @@ import com.example.scanner.ui.theme.ScannerTheme
 import android.content.Intent
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -56,8 +55,6 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.VerticalAlignmentLine
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -117,11 +114,13 @@ fun ProductListScreen(vm: ProductViewModel = viewModel()) {
         }
     }
 
-    Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-        Column {
+    Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding -> // ?
+        val configuration = LocalConfiguration.current
+        val screenHeight = configuration.screenHeightDp.dp // get screen height for Min Box Size
+        Column(Modifier.padding(innerPadding)) {
             Row(
                 horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 OutlinedTextField(
                     label = { Text("recherche") } ,
@@ -135,14 +134,9 @@ fun ProductListScreen(vm: ProductViewModel = viewModel()) {
                 }
             }
 
-    val configuration = LocalConfiguration.current
-    val screenHeight = configuration.screenHeightDp.dp // get screen height for Min Box Size
 
-    Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding -> // ?
-
-         Box(modifier = Modifier
+            Box(modifier = Modifier
              .fillMaxWidth()
-             .padding(innerPadding)
          ) { // box will help contain floating action button
 
              Row(modifier = Modifier.padding(24.dp)) {
@@ -231,7 +225,7 @@ fun ProductListScreen(vm: ProductViewModel = viewModel()) {
                      )
                  }
              }
-
+            }
         }
     }
 }
